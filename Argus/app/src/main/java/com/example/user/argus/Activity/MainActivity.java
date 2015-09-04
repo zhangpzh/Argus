@@ -183,9 +183,9 @@ public class MainActivity extends Activity {
                 registered_pkgName.clear();
             else
                 registered_pkgName = new ArrayList<String>();
-            for(Iterator it = registeredAppInfos.iterator() ; it.hasNext();)
+            for(int i = 0 ; i < registeredAppInfos.size() ; i ++)
             {
-                String tmpStr = new String(((appInfo)it.next()).getAppPkgName());
+                String tmpStr = new String(registeredAppInfos.get(i).getAppPkgName());
                 registered_pkgName.add(tmpStr);
             }
         }
@@ -254,7 +254,9 @@ public class MainActivity extends Activity {
             usedForUpdateCheckConditionsOfMainActivity.updateCheckConditionsOfMainActivity(pkgNameStillRegistered.size());
 
             // 3. 重新绘制 p_gridView 显示 剩余的 仍然设置着快捷访问的 app (新创建appInfo对象，传入包名就可以得到资源－－app名称和图标)
-            Set<appInfo> pkgStillRegistered = new HashSet<appInfo>();
+
+            ArrayList<appInfo> pkgStillRegistered = new ArrayList<appInfo>();
+
             for(i = 0 ; i < pkgNameStillRegistered.size() ; i ++)
             {
                 String tmpPkgName = new String (pkgNameStillRegistered.get(i));
@@ -269,7 +271,8 @@ public class MainActivity extends Activity {
 
 
             // 4. 更新两个列表: registeredAppInfos、leftAppInfos 和 全局静态列表 appsNotRegistered
-            Set<appInfo> noRegisteredAnyMore = new HashSet<appInfo>(registeredAppInfos);
+
+            ArrayList<appInfo> noRegisteredAnyMore = new ArrayList<appInfo>(registeredAppInfos);
 
             //noRegisteredAnyMore.removeAll(pkgStillRegistered);
             //直接remove 不太保险, 因为 appInfo字段太多，先根据包名，然后再remove比较稳妥
