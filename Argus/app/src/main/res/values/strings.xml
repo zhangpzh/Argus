@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Argus</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="activity_settings">设置</string>
+    <string name="activity_tools">小工具</string>
+    <string name="quick_access">快捷访问设置</string>
+    <string name="title_activity_select_apps">SelectAppsActivity</string>
+</resources>

@@ -1,0 +1,45 @@
+<!-- layout set for SelectAppsActivity -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.user.settings.SelectAppsActivity">
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="52dp"
+        android:horizontalSpacing="3dp"
+        android:verticalSpacing="3dp"
+        android:numColumns="3"
+        android:id="@+id/SelectAppsActivityGridView"
+        android:descendantFocusability="afterDescendants"
+        >
+    </GridView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="cancel"
+            android:id="@+id/SelectAppsActivityCancel"
+            />
+        <Button
+            android:layout_marginLeft="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="confirm"
+            android:id="@+id/SelectAppsActivityConfirm"
+            />
+    </RelativeLayout>
+</RelativeLayout>
