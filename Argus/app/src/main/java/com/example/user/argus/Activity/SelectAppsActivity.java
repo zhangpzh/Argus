@@ -1,4 +1,4 @@
-package com.example.user.argus;
+package com.example.user.argus.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.GridView;
 
 import com.example.user.argus.Adapter_and_GridViewItem.*;
 import com.example.user.argus.App_Information.*;
+import com.example.user.argus.R;
 
 import java.util.ArrayList;
 import java.util.Iterator;

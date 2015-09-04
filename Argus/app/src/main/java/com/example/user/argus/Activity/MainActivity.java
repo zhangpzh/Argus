@@ -1,7 +1,9 @@
-package com.example.user.argus;
+package com.example.user.argus.Activity;
 
 import com.example.user.argus.Adapter_and_GridViewItem.MyAdapter;
 import com.example.user.argus.App_Information.*;
+import com.example.user.argus.R;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;

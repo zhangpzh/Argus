@@ -9,4 +9,6 @@
     <string name="activity_tools">小工具</string>
     <string name="quick_access">快捷访问设置</string>
     <string name="title_activity_select_apps">SelectAppsActivity</string>
+    <string name="title_activity_welcome">WelcomeActivity</string>
+
 </resources>
