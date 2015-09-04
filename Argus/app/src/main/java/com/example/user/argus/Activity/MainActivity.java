@@ -119,6 +119,9 @@ public class MainActivity extends Activity {
         @Override
         public void onClick(View v) {
 
+            //先终结自己, 否则一个MainActivity 按退出键 退出时 会跳回到上一次的状态
+            finish();
+
             //从MainActivity 跳转到 SelectAppsActivity
             Intent intentForSelectApps = new Intent();
             intentForSelectApps.setClass(MainActivity.this,SelectAppsActivity.class);
