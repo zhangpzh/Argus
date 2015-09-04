@@ -12,11 +12,14 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +40,8 @@ public class MainActivity extends Activity {
     ArrayList<appInfo> registeredAppInfos;                                      //已设置快捷访问的应用列表
     ArrayList<appInfo> allAppInfos ;                                            //系统中所有应用列表
     ArrayList<appInfo> leftAppInfos;                                            //没有加入快捷访问的应用列表
+
+    long exitTime = System.currentTimeMillis()-2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -429,6 +434,34 @@ public class MainActivity extends Activity {
         return records;
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode , KeyEvent event) {
+        // TODO 按两次返回键退出应用程序
+
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            // 判断间隔时间 小于2秒就退出应用
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                // 应用名
+                String applicationName = getResources().getString(
+                        R.string.app_name);
+                String msg = "再按一次返回键退出" + applicationName;
+                //String msg1 = "再按一次返回键回到桌面";
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                // 计算两次返回键按下的时间差
+                exitTime = System.currentTimeMillis();
+            } else {
+                // 关闭应用程序
+                finish();
+                // 返回桌面操作
+                // Intent home = new Intent(Intent.ACTION_MAIN);
+                // home.addCategory(Intent.CATEGORY_HOME);
+                // startActivity(home);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

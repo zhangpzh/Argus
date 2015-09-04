@@ -141,6 +141,7 @@ public class SelectAppsActivity extends Activity {
             //打 log
             //System.out.println("现在文件中包名的个数: "+preferences.getInt("count",-1));
 
+            finish();
             Intent goBackIntent = new Intent();
             goBackIntent.setClass(SelectAppsActivity.this,MainActivity.class);
             startActivity(goBackIntent);
