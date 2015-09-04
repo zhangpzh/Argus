@@ -20,10 +20,8 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 
 //设置界面 Activity
@@ -53,7 +51,7 @@ public class MainActivity extends Activity {
 
 
         /* 读取已设置访问的包名列表 -> registered_pkgName */
-        Set<String> registered_pkgName = readSettings();
+        ArrayList<String> registered_pkgName = readSettings();
 
         /* 根据包名列表, 初始化 registeredAppInfos -- 存储已设置快捷访问的应用的列表  */
         showRegisteredAppInGridView(registered_pkgName);
@@ -128,18 +126,15 @@ public class MainActivity extends Activity {
     //监听器: 1. 对gridView中的项进行排序，清空配置文件，将排好序的程序的包名写入配置文件(重新启动Activity时顺序也是排好的)
     //       2. 重绘gridView.
     //       3. storeGlobalValue.checkConditionsOfMainActivity[]的值全部置为 false
+
     private class toSortRegisteredAppsListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
 
-            List<appInfo> tmpList = new ArrayList<appInfo>(registeredAppInfos);
-            Collections.sort(tmpList);
+            Collections.sort(registeredAppInfos);
 
-            registeredAppInfos.clear();
-            registeredAppInfos = new ArrayList<appInfo>(tmpList);
-
-            //1. 将 tmpList中app的包名 写入 preferences文件 "FAST_ACCESS_REGISTERED" 中(清空原先内容)
+            //1. 将排好序的包名写入 preferences文件 "FAST_ACCESS_REGISTERED" 中(清空原先内容)
             SharedPreferences preferences;
             SharedPreferences.Editor editor;
             preferences = getSharedPreferences(FAST_ACCESS_REGISTERED,MODE_PRIVATE);
@@ -147,10 +142,10 @@ public class MainActivity extends Activity {
 
             editor.clear();
 
-            editor.putInt("count",tmpList.size());
-            for(int i = 1 ; i <= tmpList.size() ; i ++)
+            editor.putInt("count", registeredAppInfos.size());
+            for(int i = 1 ; i <= registeredAppInfos.size() ; i ++)
             {
-                String tmpPkgName = new String(tmpList.get(i-1).getAppPkgName());
+                String tmpPkgName = new String(registeredAppInfos.get(i-1).getAppPkgName());
                 editor.putString("pkgName"+i,tmpPkgName);
             }
             editor.commit();
@@ -158,13 +153,12 @@ public class MainActivity extends Activity {
 
             //2. 重新绘制 gridView -- p_gridView
             wrapAppInfosIntoAdapter willGetAdapter = new wrapAppInfosIntoAdapter(MainActivity.this,"MainActivity");
-            MyAdapter newMyAdapter = willGetAdapter.getAdapter(tmpList);
+            MyAdapter newMyAdapter = willGetAdapter.getAdapter(registeredAppInfos);
             p_gridView.setAdapter(newMyAdapter);
 
             //3. checkConditionsOfMainActivity[]的值全部置为 false
             storeGlobalValue usedForUpdateCheckConditionsOfMainActivity = new storeGlobalValue();
             usedForUpdateCheckConditionsOfMainActivity.updateCheckConditionsOfMainActivity(registeredAppInfos.size());
-
         }
     }
 
@@ -179,10 +173,7 @@ public class MainActivity extends Activity {
 
         ArrayList<String> registered_pkgName;
         public toRemoveRegisteredAppsListener() {
-            if(registered_pkgName != null)
-                registered_pkgName.clear();
-            else
-                registered_pkgName = new ArrayList<String>();
+            registered_pkgName = new ArrayList<String>();
             for(int i = 0 ; i < registeredAppInfos.size() ; i ++)
             {
                 String tmpStr = new String(registeredAppInfos.get(i).getAppPkgName());
@@ -205,7 +196,6 @@ public class MainActivity extends Activity {
                 if(storeGlobalValue.checkConditionsOfMainActivity[i] == false)
                 {
                     pkgNameStillRegistered.add(tmpPkgName);
-
                 }
                 if(storeGlobalValue.checkConditionsOfMainActivity[i] == true)
                 {
@@ -281,9 +271,9 @@ public class MainActivity extends Activity {
             while(noRegisteredAnyMore.size() > 0)
             {
                 tag = true;
-                for(Iterator it = noRegisteredAnyMore.iterator() ; it.hasNext();)
+                for(i = 0 ; i < noRegisteredAnyMore.size() ; i ++)
                 {
-                    appInfo tmpInfo = (appInfo)it.next();
+                    appInfo tmpInfo = noRegisteredAnyMore.get(i);
                     String tmpStr = new String(tmpInfo.getAppPkgName());
                     if(pkgNameStillRegistered.contains(tmpStr))
                     {
@@ -315,9 +305,11 @@ public class MainActivity extends Activity {
                 registered_pkgName.clear();
             else
                 registered_pkgName = new ArrayList<String>();
-            for(Iterator it = registeredAppInfos.iterator() ; it.hasNext();)
+
+
+            for(i = 0 ; i < registeredAppInfos.size() ; i ++)
             {
-                String tmpStr = new String(((appInfo)it.next()).getAppPkgName());
+                String tmpStr = new String(registeredAppInfos.get(i).getAppPkgName());
                 registered_pkgName.add(tmpStr);
             }
 
@@ -328,7 +320,7 @@ public class MainActivity extends Activity {
 
     //将registered_pkgName 中的包名对应的 程序图标、程序名称显示在设置界面的 gridView 中，同时也保存了 intent
     //初始化 已设置快捷访问的应用列表 -- registeredAppInfos
-    void showRegisteredAppInGridView(Set<String> registered_pkgName) {
+    void showRegisteredAppInGridView(ArrayList<String> registered_pkgName) {
 
         //初始化 registeredAppInfos
         if(registeredAppInfos != null)
@@ -336,22 +328,22 @@ public class MainActivity extends Activity {
         else
             registeredAppInfos = new ArrayList<appInfo>();
 
-        for(Iterator it = registered_pkgName.iterator() ; it.hasNext(); )
+        for(int i = 0 ; i < registered_pkgName.size() ; i ++)
         {
-            String pkgName = it.next().toString();
+            String tmpPkgName = registered_pkgName.get(i);
 
             //新建一个appInfo类型变量，得到所有信息，加入registeredAppInfos
             appInfo appInformation = new appInfo(MainActivity.this);
-            appInformation.getAll(pkgName);
+            appInformation.getAll(tmpPkgName);
             registeredAppInfos.add(appInformation);
         }
 
-        System.out.println("registeredAppInfos 列表中已注册包名显示的顺序: ");
+        //打 log
+        //System.out.println("registeredAppInfos 列表中已注册包名显示的顺序: ");
         for(Iterator it = registeredAppInfos.iterator(); it.hasNext();)
         {
             String pkgName = ((appInfo)it.next()).getAppName();
             System.out.println(pkgName);
-
         }
 
         wrapAppInfosIntoAdapter willGetAdapter = new wrapAppInfosIntoAdapter(MainActivity.this,"MainActivity");
@@ -391,10 +383,10 @@ public class MainActivity extends Activity {
     }
 
     //读取设置文件中保存的 已设置快捷访问的应用 的 包名列表
-    private Set<String> readSettings() {
+    private ArrayList<String> readSettings() {
         SharedPreferences preferences;
         SharedPreferences.Editor editor;
-        Set<String> records = new HashSet<String>();
+        ArrayList<String> records = new ArrayList<String>();
 
         preferences = getSharedPreferences(FAST_ACCESS_REGISTERED,MODE_PRIVATE);
         editor = preferences.edit();
@@ -416,6 +408,8 @@ public class MainActivity extends Activity {
             }
 
             /*
+
+            打 log
             System.out.println("records 中显示的包名顺序: ");
             for(Iterator it = records.iterator() ; it.hasNext();)
             {
