@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00ced1"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -41,7 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="4px"
         android:layout_marginTop="45dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@drawable/divide_line_shape"
+        />
 
     <!-- 小工具图标 -->
     <LinearLayout
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:orientation="horizontal"
-
+        android:gravity="center_vertical"
         >
 
         <ImageView
@@ -57,14 +57,16 @@
             android:layout_width="wrap_content"
             android:layout_height="30dip"
             android:scaleType="fitStart"
-            android:src="@drawable/wifi_state" />
+            android:src="@android:drawable/ic_lock_lock" />
 
         <ImageView
             android:id="@+id/bluetooth_switch1"
             android:layout_width="wrap_content"
             android:layout_height="30dip"
             android:scaleType="fitStart"
-            android:src="@drawable/bluetooth" />
+            android:src="@android:drawable/ic_btn_speak_now"
+            android:layout_marginLeft="20dp"
+            />
     </LinearLayout>
 
     <!-- 快捷访问设置 -->
@@ -93,7 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="4px"
         android:layout_marginTop="220dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@drawable/divide_line_shape" />
 
     <!-- A relativelayout contains a GridView item and three ImageViews -->
     <RelativeLayout

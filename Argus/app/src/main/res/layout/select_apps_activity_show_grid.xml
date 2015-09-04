@@ -32,6 +32,7 @@
             android:layout_alignParentStart="true"
             android:text="cancel"
             android:id="@+id/SelectAppsActivityCancel"
+            android:background="@drawable/button_shape"
             />
         <Button
             android:layout_marginLeft="100dp"
@@ -40,6 +41,7 @@
             android:layout_alignParentEnd="true"
             android:text="confirm"
             android:id="@+id/SelectAppsActivityConfirm"
+            android:background="@drawable/button_shape"
             />
     </RelativeLayout>
 </RelativeLayout>
