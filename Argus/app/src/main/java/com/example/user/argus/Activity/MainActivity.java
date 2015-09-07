@@ -12,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +40,7 @@ public class MainActivity extends Activity {
     ArrayList<appInfo> allAppInfos ;                                            //系统中所有应用列表
     ArrayList<appInfo> leftAppInfos;                                            //没有加入快捷访问的应用列表
 
-    long exitTime = System.currentTimeMillis()-2000;
+    long exitTime = System.currentTimeMillis()-2000;    //与退出应用(仍在后台), 返回桌面的点击事件相关 -- MainActivity的回调方法 onKeyDown
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

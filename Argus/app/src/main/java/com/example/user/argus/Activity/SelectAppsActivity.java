@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.example.user.argus.Adapter_and_GridViewItem.*;
 import com.example.user.argus.App_Information.*;
@@ -66,6 +68,11 @@ public class SelectAppsActivity extends Activity {
         @Override
         public void onClick(View v) {
             finish();
+
+            //重新启动 MainActivity
+            Intent goBackIntent = new Intent();
+            goBackIntent.setClass(SelectAppsActivity.this,MainActivity.class);
+            startActivity(goBackIntent);
         }
     }
 
@@ -166,4 +173,20 @@ public class SelectAppsActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode , KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            //直接finish自身，并重新启动 MainActivity了
+
+            finish();
+            Intent goBackIntent = new Intent();
+            goBackIntent.setClass(SelectAppsActivity.this,MainActivity.class);
+            startActivity(goBackIntent);
+
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }
+

@@ -67,6 +67,13 @@
             android:src="@android:drawable/ic_btn_speak_now"
             android:layout_marginLeft="20dp"
             />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:id="@+id/serviceSwitchButton"
+            android:text="switch"
+            />
     </LinearLayout>
 
     <!-- 快捷访问设置 -->
