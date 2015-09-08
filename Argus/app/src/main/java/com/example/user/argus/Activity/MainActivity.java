@@ -3,6 +3,7 @@ package com.example.user.argus.Activity;
 import com.example.user.argus.Adapter_and_GridViewItem.MyAdapter;
 import com.example.user.argus.App_Information.*;
 import com.example.user.argus.R;
+import com.example.user.argus.floatDragon_ui.MyService;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -16,8 +17,10 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,7 +29,6 @@ import java.util.Iterator;
 import java.util.List;
 
 
-//娃哈哈到此一游
 //设置界面 Activity
 public class MainActivity extends Activity {
 
@@ -34,6 +36,7 @@ public class MainActivity extends Activity {
     ImageView toRegisterApps;
     ImageView toSortRegisteredApps;
     ImageView toRemoveRegisteredApps;
+    private Switch aSwitch;
 
     final String FAST_ACCESS_REGISTERED = "FAST_ACCESS_REGISTERED";      //存储快捷访问应用包名的设置文件
 
@@ -45,7 +48,6 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-		System.out.println("娃哈哈到此一游");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_show_grid);
 
@@ -112,6 +114,20 @@ public class MainActivity extends Activity {
 
         //绑定 "移除监听器":  移除gridView中选中的项目 -- 即删除应用的快捷访问
         toRemoveRegisteredApps.setOnClickListener(new toRemoveRegisteredAppsListener());
+
+        aSwitch = (Switch)findViewById(R.id.serviceSwitchButton);
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Intent intent = new Intent(MainActivity.this, MyService.class);
+                    startService(intent);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, MyService.class);
+                    stopService(intent);
+                }
+            }
+        });
     }
 
 

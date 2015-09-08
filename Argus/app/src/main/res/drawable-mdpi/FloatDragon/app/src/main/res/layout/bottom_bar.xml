@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/left"
+    android:layout_width="180dp"  android:layout_height="90dp"
+    android:background="@drawable/bottom" >
+    <zy.floatdragon.floatDragon_ui.AddButton
+        android:id="@+id/bottom_top"
+        android:layout_width="wrap_content"   android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"   android:layout_margin="10dip"/>
+    <zy.floatdragon.floatDragon_ui.SettingButton
+        android:id="@+id/bottom_left"
+        android:layout_width="wrap_content"    android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"  android:layout_margin="10dip" />
+    <zy.floatdragon.floatDragon_ui.ItemButton
+        android:id="@+id/bottom_right"
+        android:layout_width="wrap_content"     android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"   android:layout_alignParentRight="true"
+        android:layout_margin="10dip" />
+
+    <zy.floatdragon.floatDragon_ui.ItemButton
+        android:id="@+id/bottom_lm"
+        android:layout_width="wrap_content"     android:layout_height="wrap_content"
+        android:layout_marginLeft="44dp"        android:layout_marginTop="35dp" />
+
+    <zy.floatdragon.floatDragon_ui.AddButton
+        android:id="@+id/bottom_rm"
+        android:layout_width="wrap_content"     android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"  android:layout_alignParentTop="true"
+        android:layout_marginRight="46dp"       android:layout_marginTop="35dp" />
+
+
+</RelativeLayout>
