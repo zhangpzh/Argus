@@ -72,7 +72,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="100dp"
             android:id="@+id/serviceSwitchButton"
-            android:text="switch"
             />
     </LinearLayout>
 
