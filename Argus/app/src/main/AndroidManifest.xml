@@ -6,7 +6,8 @@
         android:allowBackup="true"
         android:icon="@drawable/argus"
         android:label="Argus"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name=".floatDragon_ui.FloatApplication">
 
         <activity
             android:name=".Activity.MainActivity"
@@ -25,5 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".floatDragon_ui.MyService"/>
     </application>
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
 </manifest>

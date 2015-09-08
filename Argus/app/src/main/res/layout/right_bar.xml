@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/left"
+    android:layout_width="90dp"  android:layout_height="180dp"
+    android:background="@drawable/right" >
+    <com.example.user.argus.floatDragon_ui.AddButton
+        android:id="@+id/right_left"
+        android:layout_width="wrap_content"   android:layout_height="wrap_content"
+        android:layout_centerVertical="true"   android:layout_margin="10dip"
+        android:layout_alignParentLeft="true" />
+    <com.example.user.argus.floatDragon_ui.SettingButton
+        android:id="@+id/right_top"
+        android:layout_width="wrap_content"    android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"   android:layout_alignParentRight="true"
+        android:layout_margin="10dip" />
+    <com.example.user.argus.floatDragon_ui.ItemButton
+        android:id="@+id/right_bottom"
+        android:layout_width="wrap_content"     android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"   android:layout_alignParentRight="true"
+        android:layout_margin="10dip"/>
+</RelativeLayout>
