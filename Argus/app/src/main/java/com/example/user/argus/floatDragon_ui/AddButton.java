@@ -16,12 +16,12 @@ public class AddButton extends ImageButton {
 
     public AddButton(Context context) {
         super(context);
-        setBackgroundResource(R.drawable.add);
+        setBackgroundResource(R.drawable.app_add);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 StaticData.move = true;
-                Log.i("add", "call");
+                Log.i("app_add", "call");
             }
         });
     }
@@ -29,12 +29,12 @@ public class AddButton extends ImageButton {
 
     public AddButton(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        setBackgroundResource(R.drawable.add);
+        setBackgroundResource(R.drawable.app_add);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 StaticData.move = true;
-                Log.i("add", "call");
+                Log.i("app_add", "call");
             }
         });
     }

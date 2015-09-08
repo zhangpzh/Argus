@@ -21,7 +21,7 @@ public class AddButton extends ImageButton {
             @Override
             public void onClick(View view) {
                 StaticData.move = true;
-                Log.i("add", "call");
+                Log.i("app_add", "call");
             }
         });
     }
@@ -34,7 +34,7 @@ public class AddButton extends ImageButton {
             @Override
             public void onClick(View view) {
                 StaticData.move = true;
-                Log.i("add", "call");
+                Log.i("app_add", "call");
             }
         });
     }
