@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
+//娃哈哈到此一游
 //设置界面 Activity
 public class MainActivity extends Activity {
 
@@ -44,6 +45,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+		System.out.println("娃哈哈到此一游");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_show_grid);
 
