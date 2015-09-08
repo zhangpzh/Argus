@@ -19,7 +19,7 @@ public class SettingButton extends ImageButton {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                OnClickMethod.setting_onClick();
                 Log.i("setting", "call");
             }
         });
@@ -32,7 +32,7 @@ public class SettingButton extends ImageButton {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                OnClickMethod.setting_onClick();
                 Log.i("setting", "call");
             }
         });
