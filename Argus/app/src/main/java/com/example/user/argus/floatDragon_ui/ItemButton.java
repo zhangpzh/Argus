@@ -18,7 +18,7 @@ public class ItemButton extends ImageButton {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                OnClickMethod.item_onClick();
                 Log.i("item", "call");
             }
         });
@@ -32,6 +32,7 @@ public class ItemButton extends ImageButton {
             @Override
             public void onClick(View view) {
 
+                OnClickMethod.item_onClick();
                 Log.i("item", "call");
             }
         });
