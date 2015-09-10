@@ -124,6 +124,9 @@ public class appInfo implements  Comparable<appInfo> {
 
             ComponentName cn = new ComponentName(newPackageName,className);
 
+            //
+            appIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //
             appIntent.setComponent(cn);
             return appIntent;
         }

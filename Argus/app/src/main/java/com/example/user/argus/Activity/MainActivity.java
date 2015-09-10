@@ -3,16 +3,23 @@ package com.example.user.argus.Activity;
 import com.example.user.argus.Adapter_and_GridViewItem.MyAdapter;
 import com.example.user.argus.App_Information.*;
 import com.example.user.argus.R;
+import com.example.user.argus.floatDragon_ui.FxService;
+import com.example.user.argus.floatDragon_ui.LockAdmin;
 import com.example.user.argus.floatDragon_ui.MyService;
+import com.example.user.argus.floatDragon_ui.StaticData;
 
 import android.app.Activity;
+import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,12 +51,25 @@ public class MainActivity extends Activity {
     ArrayList<appInfo> allAppInfos ;                                            //系统中所有应用列表
     ArrayList<appInfo> leftAppInfos;                                            //没有加入快捷访问的应用列表
 
+    private static MainActivity mainActivity=null;
+    public MainActivity(){
+        mainActivity=this;
+    }
+    public static MainActivity  getMainActivity() {
+        return mainActivity;
+    }
+
+    public ArrayList<appInfo> getRegisteredAppInfos(){
+        return registeredAppInfos;
+    }
+
     long exitTime = System.currentTimeMillis()-2000;    //与退出应用(仍在后台), 返回桌面的点击事件相关 -- MainActivity的回调方法 onKeyDown
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity_show_grid);
+
 
         //找到布局中的组件
         p_gridView = (GridView) findViewById(R.id.MainActivityGridView);
@@ -484,7 +504,7 @@ public class MainActivity extends Activity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu; this adds app to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -499,5 +519,19 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void CallForAction() {
+        DevicePolicyManager policyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        ComponentName componentName = new ComponentName(this, LockAdmin.class);
+
+            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+
+            //权限列表
+            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
+
+            //描述(additional explanation)
+            intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "激活后才能使用锁屏功能哦亲^^");
+
     }
 }

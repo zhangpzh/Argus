@@ -5,6 +5,7 @@ package com.example.user.argus.floatDragon_ui;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -15,6 +16,9 @@ import com.example.user.argus.R;
  * Created by zouyun on 15/8/5.
  */
 public class FloatView extends ImageView {
+
+    private float rawX;
+    private float rawY;
     private float mTouchx;
     private float mTouchy;
     private float x;
@@ -23,13 +27,20 @@ public class FloatView extends ImageView {
     private float mStarty;
     private double angle = 0;
     private OnClickListener mClickListen;
+    private float scale;
+    private int bottom;
+    private int top;
     private WindowManager windowManager = (WindowManager) getContext().getApplicationContext()
-            .getSystemService(Context.WINDOW_SERVICE);;
+            .getSystemService(Context.WINDOW_SERVICE);
     private WindowManager.LayoutParams windowManagerParams = ((FloatApplication) getContext()
-            .getApplicationContext()).getWindowParams();;
+            .getApplicationContext()).getWindowParams();
 
     public FloatView(Context context) {
         super(context);
+        scale = context.getResources().getDisplayMetrics().density;
+        rawY = StaticData.point[2].second + StaticData.circleSize / 2;
+        rawX = 0;
+        bottom = (int)(48 * scale + 0.5f);
     }
 
     @Override
@@ -37,6 +48,8 @@ public class FloatView extends ImageView {
         Rect frame = new Rect();
         getWindowVisibleDisplayFrame(frame);
         int statuBarHeight = frame.top;
+        float mx, my;
+        top = statuBarHeight;
         x = event.getRawX();
         y = event.getRawY() - statuBarHeight;
         float dis = 0;
@@ -55,19 +68,18 @@ public class FloatView extends ImageView {
                 }
                 mTouchx = event.getX();
                 mTouchy = event.getY();
-                Log.i("raw", "x:" + event.getRawX() + "  y:" + event.getRawY());
-                float mx, my;
-                mx = event.getRawX() - StaticData.point[StaticData.position].first;
-                my = event.getRawY() - StaticData.point[StaticData.position].second;
+                Log.i("raw" , "x:" + event.getRawX() + "  y:" + event.getRawY());
+                mx = event.getRawX() - rawX;
+                my = event.getRawY() - rawY;
                 dis = getDis(mx, my);
                 if (dis > 30) {
                     StaticData.layout[StaticData.position].setVisibility(VISIBLE);
                     if (StaticData.position > 1)
-                        angle = Math.atan((double) (mx / my));
+                        angle = Math.atan((double)(mx / my));
                     else
-                        angle = Math.atan((double) (my / mx));
+                        angle = Math.atan((double)(my / mx));
                     if (dis < 150)
-                        StaticData.layout[StaticData.position].getBackground().setAlpha((int)(dis / 150 * 255));
+                        StaticData.layout[StaticData.position].getBackground().setAlpha((int)(dis / 150 * 200));
 
                     if (dis > 230) {
                         StaticData.stateChange(angle);
@@ -75,7 +87,9 @@ public class FloatView extends ImageView {
                     } else {
 
                         StaticData.lay[StaticData.position][0].setHovered(false);
+                        StaticData.lay[StaticData.position][1].setHovered(false);
                         StaticData.lay[StaticData.position][2].setHovered(false);
+                        StaticData.lay[StaticData.position][3].setHovered(false);
                         StaticData.lay[StaticData.position][4].setHovered(false);
                     }
 
@@ -91,7 +105,9 @@ public class FloatView extends ImageView {
                     this.setImageResource(R.drawable.btn_normal);
                     break;
                 }
-                dis = getDis(mTouchx, mTouchy);
+                mx = event.getRawX() - rawX;
+                my = event.getRawY() - rawY;
+                dis = getDis(mx, my);
                 if (dis > 230) {
                     StaticData.doIt(angle);
                 }
@@ -114,9 +130,9 @@ public class FloatView extends ImageView {
 
     public float getDis(float x1, float y1)
     {
-      //  float sum = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+        //  float sum = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
         float sum = x1 * x1 + y1 * y1;
-        float re = (float) Math.sqrt(sum);
+        float re = (float)Math.sqrt(sum);
         Log.i("dis", re + "");
         return re;
     }
@@ -128,13 +144,75 @@ public class FloatView extends ImageView {
     }
 
     private void alignSide(float x1, float y1) {
-        int index = min((int)x1, (int)y1);
-        windowManagerParams.x = StaticData.pos[index].first;
-        windowManagerParams.y = StaticData.pos[index].second;
+//        int index = min((int)x1, (int)y1);
+        //      windowManagerParams.x = StaticData.pos[index].first;
+        //   windowManagerParams.y = StaticData.pos[index].second;
+        int index = minIndex((int)x1, (int)y1);
         StaticData.position = index;
-        Log.i("align", index + "");
+        windowManagerParams.x = (int) (x - mTouchx);
+        windowManagerParams.y = (int) (y - mTouchy);
+        switch (index) {
+            case 0:
+                if (x - mTouchx < StaticData.barRadius - StaticData.circleSize / 2)
+                    windowManagerParams.x = StaticData.barRadius - StaticData.circleSize / 2 ;
+                if (x - mTouchx > StaticData.screenWidth - StaticData.barRadius)
+                    windowManagerParams.x = StaticData.screenWidth - StaticData.barRadius - StaticData.circleSize / 2;
+                windowManagerParams.y = 0;
+                rawY = 0;
+                rawX = windowManagerParams.x + StaticData.circleSize / 2;
+                break;
+            case 1:
+                if (x - mTouchx < StaticData.barRadius - StaticData.circleSize / 2)
+                    windowManagerParams.x = StaticData.barRadius - StaticData.circleSize / 2 ;
+                if (x - mTouchx > StaticData.screenWidth - StaticData.barRadius)
+                    windowManagerParams.x = StaticData.screenWidth - StaticData.barRadius - StaticData.circleSize / 2 ;
+                windowManagerParams.y = StaticData.screenHeight;
+                rawY = StaticData.screenHeight;
+                rawX = windowManagerParams.x + StaticData.circleSize / 2;
+                break;
+            case 2:
+                if (y - mTouchy < StaticData.barRadius)
+                    windowManagerParams.y = StaticData.barRadius - StaticData.circleSize / 2 ;
+                if (y - mTouchy > StaticData.screenHeight - StaticData.barRadius - bottom)
+                    windowManagerParams.y = StaticData.screenHeight - StaticData.barRadius -  StaticData.circleSize;
+                windowManagerParams.x = 0;
+                rawX = 0;
+                rawY = windowManagerParams.y;
+                Log.i("RawY", rawY + "");
+                rawY += StaticData.circleSize;
+                Log.i("RawY", rawY + "");
+                break;
+            case 3:
+                if (y - mTouchy < StaticData.barRadius)
+                    windowManagerParams.y = StaticData.barRadius - StaticData.circleSize / 2 ;
+                if (y - mTouchy > StaticData.screenHeight - StaticData.barRadius - bottom)
+                    windowManagerParams.y = StaticData.screenHeight - StaticData.barRadius -  StaticData.circleSize;
+                windowManagerParams.x = StaticData.screenWidth;
+                rawX = StaticData.screenWidth;
+                rawY = windowManagerParams.y + StaticData.circleSize;
+        }
+        Log.i("align", index+"");
         Log.i("xy", "x:" + StaticData.pos[index].first + " y:" + StaticData.pos[index].second);
         windowManager.updateViewLayout(this, windowManagerParams);
+        switch (index) {
+            case 0:
+            case 1:
+                windowManagerParams.height = StaticData.barRadius;
+                windowManagerParams.width = StaticData.barRadius * 2;
+                windowManagerParams.x = (int)(x - mTouchx + StaticData.circleSize / 2 - StaticData.barRadius);
+                break;
+            case 2:
+            case 3:
+                windowManagerParams.height = StaticData.barRadius * 2;
+                windowManagerParams.width = StaticData.barRadius;
+                windowManagerParams.y = (int)(y - mTouchy + StaticData.circleSize / 2- StaticData.barRadius);
+        }
+
+        windowManager.updateViewLayout(StaticData.layout[index], windowManagerParams);
+        windowManagerParams.width = StaticData.circleSize;
+        windowManagerParams.height = StaticData.circleSize;
+
+
     }
 
     private int min(int x, int y) {
@@ -147,6 +225,28 @@ public class FloatView extends ImageView {
                 min = dis;
                 index = i;
             }
+        }
+        return index;
+    }
+
+    private int minIndex(int x, int y) {
+        int min = 99999999;
+        int index = -1;
+        if (Math.abs(y) < min) {
+            min = Math.abs(y - 0);
+            index = 0;
+        }
+        if (Math.abs(y - StaticData.screenHeight) < min) {
+            min = Math.abs(y - StaticData.screenHeight);
+            index = 1;
+        }
+        if (Math.abs(x) < min) {
+            min = Math.abs(x);
+            index = 2;
+        }
+        if (Math.abs(x - StaticData.screenWidth) < min) {
+            min = Math.abs(x - StaticData.screenWidth);
+            index = 3;
         }
         return index;
     }

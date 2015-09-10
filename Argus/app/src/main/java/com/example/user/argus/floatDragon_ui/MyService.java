@@ -26,6 +26,13 @@ public class MyService extends Service {
 
     private WindowManager.LayoutParams windowManagerParas;
 
+    private static MyService myService=null;
+    public MyService(){
+        myService=this;
+    }
+    public static MyService  getMyService() {
+        return myService;
+    }
 
     @Override
     public void onCreate()
@@ -41,8 +48,52 @@ public class MyService extends Service {
         return null;
     }
 
-
     private void creatView() {
+        windowManager = (WindowManager) getApplicationContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        StaticData.screenWidth = metrics.widthPixels;
+        StaticData.screenHeight = metrics.heightPixels;
+
+
+        windowManagerParas = ((FloatApplication)getApplication()).getWindowParams();
+        windowManagerParas.type = WindowManager.LayoutParams.TYPE_PHONE;
+        windowManagerParas.format = PixelFormat.RGBA_8888;
+        windowManagerParas.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        windowManagerParas.gravity = Gravity.LEFT | Gravity.TOP;
+        windowManagerParas.x = 0;
+        windowManagerParas.y = StaticData.screenHeight / 2 - 360;
+        windowManagerParas.width = StaticData.barRadius;
+        windowManagerParas.height = StaticData.barRadius * 2;
+        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        StaticData.layout[2] = inflater.inflate(R.layout.left_bar, null);
+        windowManager.addView(StaticData.layout[2], windowManagerParas);
+        windowManagerParas.x = StaticData.screenWidth - StaticData.barRadius;
+        StaticData.layout[3] = inflater.inflate(R.layout.right_bar, null);
+        windowManager.addView(StaticData.layout[3], windowManagerParas);
+
+        windowManagerParas.width = StaticData.barRadius * 2;
+        windowManagerParas.height = StaticData.barRadius;
+        windowManagerParas.x = StaticData.screenWidth / 2 - StaticData.barRadius;
+        windowManagerParas.y = -StaticData.len;
+        StaticData.layout[0] = inflater.inflate(R.layout.top_bar, null);
+        windowManager.addView(StaticData.layout[0], windowManagerParas);
+        windowManagerParas.y = StaticData.screenHeight - StaticData.barRadius / 2;
+        StaticData.layout[1] = inflater.inflate(R.layout.bottom_bar, null);
+        windowManager.addView(StaticData.layout[1], windowManagerParas);
+
+        for (int i = 0; i < 4; i ++) {
+            StaticData.layout[i].setVisibility(View.GONE);
+        }
+        StaticData.init();
+        windowManagerParas.x = StaticData.pos[StaticData.position].first;
+        windowManagerParas.y = StaticData.pos[StaticData.position].second;
+        windowManagerParas.height = StaticData.circleSize;
+        windowManagerParas.width = StaticData.circleSize;
+
         floatView = new FloatView(getApplicationContext());
         floatView.setImageAlpha(100);
         floatView.setOnClickListener(new View.OnClickListener() {
@@ -53,57 +104,31 @@ public class MyService extends Service {
             }
         });
         floatView.setImageResource(R.drawable.btn_normal);
-
-
-        windowManager = (WindowManager) getApplicationContext()
-                .getSystemService(Context.WINDOW_SERVICE);
-        windowManagerParas = ((FloatApplication)getApplication()).getWindowParams();
-        windowManagerParas.type = WindowManager.LayoutParams.TYPE_PHONE;
-        windowManagerParas.format = PixelFormat.RGBA_8888;
-        windowManagerParas.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        windowManagerParas.gravity = Gravity.LEFT | Gravity.TOP;
-
-        DisplayMetrics metrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        StaticData.screenWidth = metrics.widthPixels;
-        StaticData.screenHeight = metrics.heightPixels;
-
-        windowManagerParas.x = 0;
-        windowManagerParas.y = StaticData.screenHeight / 2 - 360;
-        windowManagerParas.width = 360;
-        windowManagerParas.height = 720;
-        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        StaticData.layout[2] = inflater.inflate(R.layout.left_bar, null);
-        windowManager.addView(StaticData.layout[2], windowManagerParas);
-        windowManagerParas.x = StaticData.screenWidth - 360;
-        StaticData.layout[3] = inflater.inflate(R.layout.right_bar, null);
-        windowManager.addView(StaticData.layout[3], windowManagerParas);
-
-        windowManagerParas.width = 720;
-        windowManagerParas.height = 360;
-        windowManagerParas.x = StaticData.screenWidth / 2 - 360;
-        windowManagerParas.y = -StaticData.len;
-        StaticData.layout[0] = inflater.inflate(R.layout.top_bar, null);
-        windowManager.addView(StaticData.layout[0], windowManagerParas);
-        windowManagerParas.y = StaticData.screenHeight - 180;
-        StaticData.layout[1] = inflater.inflate(R.layout.bottom_bar, null);
-        windowManager.addView(StaticData.layout[1], windowManagerParas);
-
-        for (int i = 0; i < 4; i ++) {
-            StaticData.layout[i].setVisibility(View.GONE);
-        }
-        StaticData.init();
-        windowManagerParas.x = StaticData.pos[StaticData.position].first;
-        windowManagerParas.y = StaticData.pos[StaticData.position].second;
-        System.out.println(floatView.getMeasuredHeight());
-        windowManagerParas.height = StaticData.circleSize;
-        windowManagerParas.width = StaticData.circleSize;
         windowManager.addView(floatView, windowManagerParas);
 
 
     }
 
+    public void isShow(boolean show){
+        if(show == true) {
+            Intent intent = new Intent(MyService.this, FxService.class);
+            startService(intent);
+        }
+        else{
+            Intent intent = new Intent(MyService.this, FxService.class);
+            stopService(intent);
+        }
+    }
+    public void isShow2(boolean show){
+        if(show == true) {
+            Intent intent = new Intent(MyService.this, ItService.class);
+            startService(intent);
+        }
+        else{
+            Intent intent = new Intent(MyService.this, ItService.class);
+            stopService(intent);
+        }
+    }
 
     @Override
     public void onDestroy()

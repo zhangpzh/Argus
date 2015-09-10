@@ -107,7 +107,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
+
+
 
         <GridView
             android:id="@+id/MainActivityGridView"
@@ -132,7 +135,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_weight="7"
                 android:scaleType="centerInside"
-                android:src="@drawable/app_add"
+                android:src="@drawable/add_app"
 
                 />
 

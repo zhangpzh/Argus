@@ -8,32 +8,33 @@ import android.widget.ImageButton;
 
 import com.example.user.argus.R;
 
+
 /**
  * Created by zouyun on 15/9/3.
  */
-public class ItemButton extends ImageButton {
-    public ItemButton(Context context) {
+public class MoveButton extends ImageButton {
+
+    public MoveButton(Context context) {
         super(context);
-        setBackgroundResource(R.drawable.items);
+        setBackgroundResource(R.drawable.move);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnClickMethod.item_onClick();
-                Log.i("item", "call");
+                OnClickMethod.move_onClick();
+                Log.i("add_app", "call");
             }
         });
     }
 
 
-    public ItemButton(Context context, AttributeSet attributeSet) {
+    public MoveButton(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        setBackgroundResource(R.drawable.items);
+        setBackgroundResource(R.drawable.move);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                OnClickMethod.item_onClick();
-                Log.i("item", "call");
+                OnClickMethod.move_onClick();
+                Log.i("add_app", "call");
             }
         });
     }
