@@ -129,6 +129,16 @@ public class MyService extends Service {
             stopService(intent);
         }
     }
+    public void isShow3(boolean show){
+        if(show == true) {
+            Intent intent = new Intent(MyService.this, NotepadService.class);
+            startService(intent);
+        }
+        else{
+            Intent intent = new Intent(MyService.this, NotepadService.class);
+            stopService(intent);
+        }
+    }
 
     @Override
     public void onDestroy()

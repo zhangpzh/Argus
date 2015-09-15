@@ -42,6 +42,7 @@
         <service android:name=".floatDragon_ui.MyService"/>
         <service android:name=".floatDragon_ui.FxService"/>
         <service android:name=".floatDragon_ui.ItService"/>
+        <service android:name=".floatDragon_ui.NotepadService"/>
     </application>
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />

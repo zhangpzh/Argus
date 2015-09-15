@@ -11,4 +11,7 @@
     <string name="title_activity_select_apps">SelectAppsActivity</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
 
+    <drawable name="button_normal">#00000000</drawable>
+    <drawable name="button_clicked">#64CDAA7D</drawable>
+
 </resources>

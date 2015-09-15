@@ -26,7 +26,7 @@ public class NoteButton extends ImageButton {
     }
 
 
-    public NoteButton(Context context, AttributeSet attributeSet) {
+    public NoteButton(final Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         setBackgroundResource(R.drawable.note);
         setOnClickListener(new OnClickListener() {
@@ -37,5 +37,4 @@ public class NoteButton extends ImageButton {
             }
         });
     }
-
 }

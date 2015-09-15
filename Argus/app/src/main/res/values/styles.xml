@@ -5,4 +5,18 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="mypopwindow_anim_style">
+        <item name="android:windowEnterAnimation">@anim/popshow_anim</item>
+        <item name="android:windowExitAnimation">@anim/pophidden_anim</item>
+    </style>
+
+    <style name="browse_notepad_popwindow">
+        <item name="android:windowEnterAnimation">@anim/browse_show_anim</item>
+        <item name="android:windowExitAnimation">@anim/browse_hidden_anim</item>
+    </style>
+    <style name="delete_notepad_popwindow">
+    <item name="android:windowEnterAnimation">@anim/delete_show_anim</item>
+    <item name="android:windowExitAnimation">@anim/delete_hidden_anim</item>
+</style>
+
 </resources>

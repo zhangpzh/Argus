@@ -30,6 +30,7 @@ public  class StaticData {
 
     public static int isShow  = 0;
     public static int isShow2  = 0;
+    public static int isShow3 = 0;
 
 
     public static int circleSize = 126;
