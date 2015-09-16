@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <RelativeLayout
+        android:id="@+id/notepad_head"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@drawable/notepad_head">
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/notepad_popupwindow"
+        android:layout_below="@id/notepad_head"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/notepad">
+        <TextView
+            android:id="@+id/notepad_show_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="BROWSE-NOTE (DELETE)"
+            android:gravity="center"
+            android:textSize="22dp"
+            android:textStyle="italic"
+            android:textColor="#D15FEE" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4px"
+            android:layout_below="@id/notepad_show_title"
+            android:id="@+id/viewline"
+            android:background="@drawable/divide_line_shape" />
+        <TextView
+            android:layout_below="@id/viewline"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textSize="23dp"
+            android:textColor="#000000"
+            android:focusable="true"
+            android:id="@+id/delete_browse_textview" />
+    </RelativeLayout>
+</RelativeLayout>

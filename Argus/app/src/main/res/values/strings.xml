@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Argus</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_select_apps">SelectAppsActivity</string>
+    <string name="title_activity_welcome">WelcomeActivity</string>
+    <drawable name="button_normal">#00000000</drawable>
+    <drawable name="button_clicked">#64CDAA7D</drawable>
+</resources>

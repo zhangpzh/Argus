@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:id="@+id/notepad_show_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:layout_marginLeft="50dp"
+    android:layout_marginRight="50dp"
+    android:layout_marginBottom="90dp"
+    android:layout_marginTop="90dp">
+    <RelativeLayout
+        android:id="@+id/notepad_head"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@drawable/notepad_head">
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/notepad_activity"
+        android:layout_below="@id/notepad_head"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/notepad">
+
+        <TextView
+            android:id="@+id/notepad_show_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="L.TINY-NOTE"
+            android:gravity="center"
+            android:textSize="22dp"
+            android:textStyle="italic"
+            android:textColor="#D15FEE"
+            android:layout_toLeftOf="@+id/notepad_main_delete"
+            android:layout_toStartOf="@+id/notepad_main_delete" />
+
+        <ImageView
+            android:id="@+id/notepad_main_delete"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/bin"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="20dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4px"
+            android:layout_below="@id/notepad_show_title"
+            android:id="@+id/viewline"
+            android:background="@drawable/divide_line_shape" />
+
+        <com.floatdragon.argus.floatDragon_ui.SlideCutListView
+            android:layout_below="@id/viewline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:dividerHeight="0dp"
+            android:divider="#000000"
+            android:scrollbars="none"
+            android:id="@+id/lv_friend_list"
+            android:layout_marginBottom="40dp">
+        </com.floatdragon.argus.floatDragon_ui.SlideCutListView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/empty_list_textview"
+            android:textColor="#8B4500"
+            android:text="Click the blank
+or the button
+below to create
+your first Tiny-Note."
+            android:textSize="23dp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_below="@id/viewline"
+            android:layout_above="@id/viewline2"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/viewline2"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="38dp"
+            android:background="@drawable/listview_underline" />
+        <Button
+            android:id="@+id/notepad_main_add"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:text="Create New Note"
+            android:textSize="25dp"
+            android:textStyle="italic"
+            android:gravity="center_horizontal"
+            android:textColor="#A0522D"
+            android:background="@drawable/selector"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>
+</RelativeLayout>
