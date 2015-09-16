@@ -105,7 +105,7 @@ public class ItService extends Service
         wmParams.width = 600;
         wmParams.height = 600;
 
-        LayoutInflater inflater = LayoutInflater.from(getApplication());
+        final LayoutInflater inflater = LayoutInflater.from(getApplication());
         //获取浮动窗口视图所在布局
         mFloatLayout = (GridLayout) inflater.inflate(R.layout.float_layout, null);
         mFloatLayout.getBackground().setAlpha(100);
@@ -127,29 +127,29 @@ public class ItService extends Service
         //浮动窗口按钮
         appInfoSize = appInfos.size();
 
-            switch (appInfoSize) {
-             default:
-                     mFloatView7.setVisibility(View.VISIBLE);
-                     mFloatView7.setBackground(appInfos.get(6).getAppIcon());
-                 case 6:
-                     mFloatView6.setVisibility(View.VISIBLE);
-                     mFloatView6.setBackground(appInfos.get(5).getAppIcon());
-                 case 5:
-                     mFloatView5.setVisibility(View.VISIBLE);
-                     mFloatView5.setBackground(appInfos.get(4).getAppIcon());
-                 case 4:
-                     mFloatView4.setVisibility(View.VISIBLE);
-                    mFloatView4.setBackground(appInfos.get(3).getAppIcon());
-                case 3:
-                    mFloatView3.setVisibility(View.VISIBLE);
-                    mFloatView3.setBackground(appInfos.get(2).getAppIcon());
-                case 2:
-                    mFloatView2.setVisibility(View.VISIBLE);
-                    mFloatView2.setBackground(appInfos.get(1).getAppIcon());
-                case 1:
-                    mFloatView.setVisibility(View.VISIBLE);
-                    mFloatView.setBackground(appInfos.get(0).getAppIcon());
-            }
+        switch (appInfoSize) {
+            default:
+                mFloatView7.setVisibility(View.VISIBLE);
+                mFloatView7.setBackground(appInfos.get(6).getAppIcon());
+            case 6:
+                mFloatView.setVisibility(View.VISIBLE);
+                mFloatView.setBackground(appInfos.get(0).getAppIcon());
+            case 5:
+                mFloatView2.setVisibility(View.VISIBLE);
+                mFloatView2.setBackground(appInfos.get(1).getAppIcon());
+            case 4:
+                mFloatView4.setVisibility(View.VISIBLE);
+                mFloatView4.setBackground(appInfos.get(2).getAppIcon());
+            case 3:
+                mFloatView6.setVisibility(View.VISIBLE);
+                mFloatView6.setBackground(appInfos.get(3).getAppIcon());
+            case 2:
+                mFloatView5.setVisibility(View.VISIBLE);
+                mFloatView5.setBackground(appInfos.get(4).getAppIcon());
+            case 1:
+                mFloatView3.setVisibility(View.VISIBLE);
+                mFloatView3.setBackground(appInfos.get(5).getAppIcon());
+        }
 
         mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
                 View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
@@ -178,6 +178,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(0).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
 
@@ -194,6 +196,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(1).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
             }
@@ -209,6 +213,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(2).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
             }
@@ -224,6 +230,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(3).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
             }
@@ -239,6 +247,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(4).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
             }
@@ -256,6 +266,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(5).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
             }
@@ -274,6 +286,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(6).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
             }
