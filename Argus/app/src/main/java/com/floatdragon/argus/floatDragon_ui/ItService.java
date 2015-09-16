@@ -212,7 +212,7 @@ public class ItService extends Service
 //                    startActivity(intent);
 //                }
 //                else{
-                    Intent intent = appInfos.get(2).getAppIntent();
+                    Intent intent = appInfos.get(5).getAppIntent();
                     if(intent == null)
                         return;
                     startActivity(intent);
@@ -229,7 +229,7 @@ public class ItService extends Service
 //                    startActivity(intent);
 //                }
 //                else{
-                    Intent intent = appInfos.get(3).getAppIntent();
+                    Intent intent = appInfos.get(2).getAppIntent();
                     if(intent == null)
                         return;
                     startActivity(intent);
@@ -265,7 +265,7 @@ public class ItService extends Service
 //                    startActivity(intent);
 //                }
 //                else{
-                    Intent intent = appInfos.get(5).getAppIntent();
+                    Intent intent = appInfos.get(3).getAppIntent();
                     if(intent == null)
                         return;
                     startActivity(intent);
