@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 
+//MainActivity
 public class MainActivity extends Activity {
 
     private GridView pGridView;                                                 //选择app的网格
