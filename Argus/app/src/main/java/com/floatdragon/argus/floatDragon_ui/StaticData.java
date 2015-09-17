@@ -13,6 +13,7 @@ import java.util.logging.Handler;
  * Created by zouyun on 15/9/3.
  */
 public  class StaticData {
+    public static boolean init = false;
     public static int screenWidth;
     public static int screenHeight;
     public static int len = 0;
@@ -26,7 +27,7 @@ public  class StaticData {
     public static final int LEFT = 2;
     public static final int RIGHT = 3;
     public static Pair<Integer, Integer>[] point;
-    public static Pair<Integer, Integer>[] pos;
+    public static Pair<Integer, Integer> pos;
 
     public static int isShow  = 0;
     public static int isShow2  = 0;
@@ -38,6 +39,8 @@ public  class StaticData {
     public static int barRadius = 360;
 
     public static void init() {
+        move = false;
+        position = 2;
         lay = new ImageButton[4][];
         for (int i = 0; i < 4; i ++)
             lay[i] = new ImageButton[5];
@@ -67,11 +70,7 @@ public  class StaticData {
         lay[3][3] = (ImageButton)layout[3].findViewById(R.id.right_lb);
         lay[3][4] = (ImageButton)layout[3].findViewById(R.id.right_top);
 
-        pos = new Pair[4];
-        pos[0] = Pair.create(screenWidth / 2 - circleSize / 2, 0);
-        pos[1] = Pair.create(screenWidth / 2 - circleSize / 2, screenHeight);
-        pos[2] = Pair.create(0, screenHeight / 2 - circleSize / 2);
-        pos[3] = Pair.create(screenWidth, screenHeight / 2 - circleSize / 2);
+        pos = new Pair<>(0, screenHeight / 2 - circleSize / 2);
 
         point = new Pair[4];
         point[0] = Pair.create(screenWidth / 2, 0);

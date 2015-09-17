@@ -5,6 +5,7 @@ import com.floatdragon.argus.app_shown.RoundImageView;
 import com.floatdragon.argus.floatDragon_ui.*;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -114,6 +115,10 @@ public class MainActivity extends Activity {
 
         /* 为桌面小圆点开关绑定监听器 */
         aSwitch = (Switch)findViewById(R.id.serviceSwitchButton);
+        if(scaleTheService(MyService.class.getName()))
+            aSwitch.setChecked(true);
+        else
+            aSwitch.setChecked(false);
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -583,5 +588,19 @@ public class MainActivity extends Activity {
 
         //描述(additional explanation)
         intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "激活后才能使用锁屏功能哦亲^^");
+    }
+
+    //create by zouyun
+    //监听service是否运行
+    private boolean scaleTheService(String className){
+        ActivityManager am = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> serviceList = am.getRunningServices(30);
+        if (!(serviceList.size() > 0))
+            return false;
+        for (int i = 0; i < serviceList.size(); i ++) {
+            if (serviceList.get(i).service.getClassName().equals(className))
+                return true;
+        }
+        return false;
     }
 }
