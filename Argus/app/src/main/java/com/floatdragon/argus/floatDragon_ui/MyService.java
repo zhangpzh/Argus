@@ -57,7 +57,7 @@ public class MyService extends Service {
         windowManager.getDefaultDisplay().getMetrics(metrics);
         StaticData.screenWidth = metrics.widthPixels;
         StaticData.screenHeight = metrics.heightPixels;
-
+        StaticData.barRadius = StaticData.screenHeight / 4;
 
         windowManagerParas = ((FloatApplication)getApplication()).getWindowParams();
         windowManagerParas.type = WindowManager.LayoutParams.TYPE_PHONE;
@@ -66,12 +66,14 @@ public class MyService extends Service {
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         windowManagerParas.gravity = Gravity.LEFT | Gravity.TOP;
         windowManagerParas.x = 0;
-        windowManagerParas.y = StaticData.screenHeight / 2 - 360;
+        windowManagerParas.y = StaticData.screenHeight / 2 - StaticData.barRadius;
         windowManagerParas.width = StaticData.barRadius;
         windowManagerParas.height = StaticData.barRadius * 2;
         LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         StaticData.layout[2] = inflater.inflate(R.layout.left_bar, null);
         windowManager.addView(StaticData.layout[2], windowManagerParas);
+        windowManagerParas.width = StaticData.barRadius * 2;
+        windowManagerParas.height = StaticData.barRadius * 4;
         windowManagerParas.x = StaticData.screenWidth - StaticData.barRadius;
         StaticData.layout[3] = inflater.inflate(R.layout.right_bar, null);
         windowManager.addView(StaticData.layout[3], windowManagerParas);
@@ -90,11 +92,10 @@ public class MyService extends Service {
             StaticData.layout[i].setVisibility(View.GONE);
         }
         StaticData.init();
-        windowManagerParas.x = StaticData.pos[StaticData.position].first;
-        windowManagerParas.y = StaticData.pos[StaticData.position].second;
+        windowManagerParas.x = StaticData.pos.first;
+        windowManagerParas.y = StaticData.pos.second;
         windowManagerParas.height = StaticData.circleSize;
         windowManagerParas.width = StaticData.circleSize;
-
         floatView = new FloatView(getApplicationContext());
         floatView.setImageAlpha(100);
         floatView.setOnClickListener(new View.OnClickListener() {

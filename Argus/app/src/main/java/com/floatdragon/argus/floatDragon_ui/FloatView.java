@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.util.Log;
+import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -38,8 +39,8 @@ public class FloatView extends ImageView {
     public FloatView(Context context) {
         super(context);
         scale = context.getResources().getDisplayMetrics().density;
-        rawY = StaticData.point[2].second + StaticData.circleSize / 2;
-        rawX = 0;
+        rawX = StaticData.pos.first;
+        rawY = StaticData.pos.second + StaticData.circleSize / 2;
         bottom = (int)(48 * scale + 0.5f);
     }
 
@@ -72,16 +73,14 @@ public class FloatView extends ImageView {
                 mx = event.getRawX() - rawX;
                 my = event.getRawY() - rawY;
                 dis = getDis(mx, my);
-                if (dis > 30) {
+                if (dis > StaticData.barRadius / 4) {
                     StaticData.layout[StaticData.position].setVisibility(VISIBLE);
                     if (StaticData.position > 1)
                         angle = Math.atan((double)(mx / my));
                     else
                         angle = Math.atan((double)(my / mx));
-                    if (dis < 150)
-                        StaticData.layout[StaticData.position].getBackground().setAlpha((int)(dis / 150 * 200));
 
-                    if (dis > 230) {
+                    if (dis > StaticData.barRadius / 4 * 3) {
                         StaticData.stateChange(angle);
                         Log.i("angle", angle + "");
                     } else {
@@ -108,7 +107,7 @@ public class FloatView extends ImageView {
                 mx = event.getRawX() - rawX;
                 my = event.getRawY() - rawY;
                 dis = getDis(mx, my);
-                if (dis > 230) {
+                if (dis > StaticData.barRadius / 4 * 3) {
                     StaticData.doIt(angle);
                 }
                 if (StaticData.move) System.out.println("move");
@@ -192,7 +191,7 @@ public class FloatView extends ImageView {
                 rawY = windowManagerParams.y + StaticData.circleSize;
         }
         Log.i("align", index+"");
-        Log.i("xy", "x:" + StaticData.pos[index].first + " y:" + StaticData.pos[index].second);
+        StaticData.pos = new Pair<>(windowManagerParams.x, windowManagerParams.y);
         windowManager.updateViewLayout(this, windowManagerParams);
         switch (index) {
             case 0:
@@ -215,19 +214,6 @@ public class FloatView extends ImageView {
 
     }
 
-    private int min(int x, int y) {
-        float dis = 0;
-        int index = 0;
-        float min = 99999999;
-        for (int i = 0; i < 4; i ++) {
-            dis = Math.abs((x - StaticData.pos[i].first) * (x - StaticData.pos[i].first) + (y - StaticData.pos[i].second) * (y - StaticData.pos[i].second));
-            if (dis < min) {
-                min = dis;
-                index = i;
-            }
-        }
-        return index;
-    }
 
     private int minIndex(int x, int y) {
         int min = 99999999;
