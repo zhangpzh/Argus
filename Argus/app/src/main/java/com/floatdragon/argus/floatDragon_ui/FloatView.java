@@ -31,6 +31,7 @@ public class FloatView extends ImageView {
     private float scale;
     private int bottom;
     private int top;
+    private int addx, addy;
     private WindowManager windowManager = (WindowManager) getContext().getApplicationContext()
             .getSystemService(Context.WINDOW_SERVICE);
     private WindowManager.LayoutParams windowManagerParams = ((FloatApplication) getContext()
@@ -49,15 +50,19 @@ public class FloatView extends ImageView {
         Rect frame = new Rect();
         getWindowVisibleDisplayFrame(frame);
         int statuBarHeight = frame.top;
+        bottom = StaticData.screenHeight - frame.bottom;
+        Log.i("bottom", bottom + "");
+        Log.i("bottom", ""+ bottom);
         float mx, my;
         top = statuBarHeight;
         x = event.getRawX();
         y = event.getRawY() - statuBarHeight;
+        mTouchx = event.getX();
+        mTouchy = event.getY();
+        Log.i("this", "sd");
         float dis = 0;
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mTouchx = event.getX();
-                mTouchy = event.getY();
                 mStartx = x;
                 mStarty = y;
                 this.setImageResource(R.drawable.btn_press);
@@ -67,11 +72,8 @@ public class FloatView extends ImageView {
                     updateViewPosition();
                     break;
                 }
-                mTouchx = event.getX();
-                mTouchy = event.getY();
-                Log.i("raw" , "x:" + event.getRawX() + "  y:" + event.getRawY());
-                mx = event.getRawX() - rawX;
-                my = event.getRawY() - rawY;
+                mx = x - rawX;
+                my = y - rawY;
                 dis = getDis(mx, my);
                 if (dis > StaticData.barRadius / 4) {
                     StaticData.layout[StaticData.position].setVisibility(VISIBLE);
@@ -84,33 +86,38 @@ public class FloatView extends ImageView {
                         StaticData.stateChange(angle);
                         Log.i("angle", angle + "");
                     } else {
-
                         StaticData.lay[StaticData.position][0].setHovered(false);
                         StaticData.lay[StaticData.position][1].setHovered(false);
                         StaticData.lay[StaticData.position][2].setHovered(false);
                         StaticData.lay[StaticData.position][3].setHovered(false);
                         StaticData.lay[StaticData.position][4].setHovered(false);
                     }
+                    if (StaticData.lay[StaticData.position][2].isHovered() && dis > StaticData.barRadius * 1.1) {
+                        StaticData.move = true;
+                        StaticData.layout[StaticData.position].setVisibility(GONE);
 
+                        windowManager.updateViewLayout(this, windowManagerParams);
+                    }
                 } else {
                     StaticData.layout[StaticData.position].setVisibility(GONE);
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                addx = 0;
+                addy = 0;
                 if (StaticData.move) {
                     StaticData.move = false;
-                    alignSide(event.getRawX(), event.getRawY());
+                    alignSide(x, y);
                     StaticData.layout[StaticData.position].setVisibility(GONE);
                     this.setImageResource(R.drawable.btn_normal);
                     break;
                 }
-                mx = event.getRawX() - rawX;
-                my = event.getRawY() - rawY;
+                mx = x - rawX;
+                my = y - rawY;
                 dis = getDis(mx, my);
                 if (dis > StaticData.barRadius / 4 * 3) {
                     StaticData.doIt(angle);
                 }
-                if (StaticData.move) System.out.println("move");
                 mTouchx = mTouchy = 0;
                 if ((x - mStartx) < 5 && (y - mStarty) < 5) {
                     mClickListen.onClick(this);
@@ -137,8 +144,8 @@ public class FloatView extends ImageView {
     }
 
     private void updateViewPosition() {
-        windowManagerParams.x = (int) (x - mTouchx);
-        windowManagerParams.y = (int) (y - mTouchy);
+        windowManagerParams.x = (int) (x);
+        windowManagerParams.y = (int) (y);
         windowManager.updateViewLayout(this, windowManagerParams);
     }
 
@@ -172,7 +179,7 @@ public class FloatView extends ImageView {
             case 2:
                 if (y - mTouchy < StaticData.barRadius)
                     windowManagerParams.y = StaticData.barRadius - StaticData.circleSize / 2 ;
-                if (y - mTouchy > StaticData.screenHeight - StaticData.barRadius - bottom)
+                if (y - mTouchy > StaticData.screenHeight - StaticData.barRadius - bottom - StaticData.circleSize / 2)
                     windowManagerParams.y = StaticData.screenHeight - StaticData.barRadius -  StaticData.circleSize;
                 windowManagerParams.x = 0;
                 rawX = 0;
@@ -184,7 +191,7 @@ public class FloatView extends ImageView {
             case 3:
                 if (y - mTouchy < StaticData.barRadius)
                     windowManagerParams.y = StaticData.barRadius - StaticData.circleSize / 2 ;
-                if (y - mTouchy > StaticData.screenHeight - StaticData.barRadius - bottom)
+                if (y - mTouchy > StaticData.screenHeight - StaticData.barRadius - bottom - StaticData.circleSize / 2)
                     windowManagerParams.y = StaticData.screenHeight - StaticData.barRadius -  StaticData.circleSize;
                 windowManagerParams.x = StaticData.screenWidth;
                 rawX = StaticData.screenWidth;
