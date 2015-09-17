@@ -1,5 +1,6 @@
 package com.floatdragon.argus.floatDragon_ui;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -21,7 +22,7 @@ public  class StaticData {
     public static ImageButton[] lay[];
     public static boolean move = false;
     public static int position = 2;
-
+    public static int[] icon;
     public static final int TOP = 0;
     public static final int BOTTOM = 1;
     public static final int LEFT = 2;
@@ -77,6 +78,12 @@ public  class StaticData {
         point[1] = Pair.create(screenWidth / 2 , screenHeight);
         point[2] = Pair.create(0, screenHeight / 2);
         point[3] = Pair.create(screenWidth, screenHeight / 2);
+
+        icon  = new int[4];
+        icon[0] = R.drawable.top_circle_normal;
+        icon[1] = R.drawable.bottom_circle_normal;
+        icon[2] = R.drawable.left_circle_normal;
+        icon[3] = R.drawable.right_circle_normal;
 
 
     }

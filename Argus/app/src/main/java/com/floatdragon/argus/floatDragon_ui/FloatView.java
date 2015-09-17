@@ -5,7 +5,11 @@ package com.floatdragon.argus.floatDragon_ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
@@ -59,13 +63,14 @@ public class FloatView extends ImageView {
         y = event.getRawY() - statuBarHeight;
         mTouchx = event.getX();
         mTouchy = event.getY();
+        float degree;
         Log.i("this", "sd");
         float dis = 0;
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mStartx = x;
                 mStarty = y;
-                this.setImageResource(R.drawable.btn_press);
+     //           this.setImageResource(R.drawable.btn_press);
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (StaticData.move) {
@@ -77,10 +82,20 @@ public class FloatView extends ImageView {
                 dis = getDis(mx, my);
                 if (dis > StaticData.barRadius / 4) {
                     StaticData.layout[StaticData.position].setVisibility(VISIBLE);
-                    if (StaticData.position > 1)
-                        angle = Math.atan((double)(mx / my));
-                    else
-                        angle = Math.atan((double)(my / mx));
+                    if (StaticData.position > 1) {
+                        angle = Math.atan((double) (mx / my));
+                        degree = (float)(Math.atan((double)(my / mx)) / Math.PI * 180);
+                    } else {
+                        angle = Math.atan((double) (my / mx));
+                        degree = (float)-(Math.atan((double)(mx / my)) / Math.PI * 180);
+                    }
+                    Matrix matrix = new Matrix();
+                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(),StaticData.icon[StaticData.position]);
+                    matrix.setRotate(degree);
+                    Bitmap newBit = Bitmap.createBitmap(bitmap, 0, 0,bitmap.getHeight(),
+                            bitmap.getHeight(), matrix, true);
+                    BitmapDrawable bd = new BitmapDrawable(newBit);
+                    this.setImageDrawable(bd);
 
                     if (dis > StaticData.barRadius / 4 * 3) {
                         StaticData.stateChange(angle);
@@ -95,7 +110,7 @@ public class FloatView extends ImageView {
                     if (StaticData.lay[StaticData.position][2].isHovered() && dis > StaticData.barRadius * 1.1) {
                         StaticData.move = true;
                         StaticData.layout[StaticData.position].setVisibility(GONE);
-
+                        setImageResource(R.drawable.btn_normal);
                         windowManager.updateViewLayout(this, windowManagerParams);
                     }
                 } else {
@@ -109,7 +124,7 @@ public class FloatView extends ImageView {
                     StaticData.move = false;
                     alignSide(x, y);
                     StaticData.layout[StaticData.position].setVisibility(GONE);
-                    this.setImageResource(R.drawable.btn_normal);
+                    this.setImageResource(StaticData.icon[StaticData.position]);
                     break;
                 }
                 mx = x - rawX;
@@ -123,7 +138,7 @@ public class FloatView extends ImageView {
                     mClickListen.onClick(this);
                 }
                 StaticData.layout[StaticData.position].setVisibility(GONE);
-                this.setImageResource(R.drawable.btn_normal);
+                this.setImageResource(StaticData.icon[StaticData.position]);
                 break;
         }
         return true;
