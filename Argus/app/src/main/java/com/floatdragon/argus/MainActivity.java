@@ -182,6 +182,10 @@ public class MainActivity extends Activity {
         {
             editor.putInt("count",0);
             editor.commit();
+            for(int i = 0 ; i < 6 ; i ++)
+            {
+                records.add("NONE");
+            }
         }
         //preferences 文件存在 读取其中的 包名
         else
@@ -354,7 +358,7 @@ public class MainActivity extends Activity {
             }
             else
             {
-                if(registered_pkgName.get(tmpView.number).equals("NONE") == false)
+                if(registered_pkgName.get(tmpView.number) == null || registered_pkgName.get( tmpView.number).equals("NONE") == false)   //error
                 {
                     return;
                 }
