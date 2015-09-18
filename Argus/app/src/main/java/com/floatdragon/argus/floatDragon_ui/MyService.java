@@ -105,7 +105,7 @@ public class MyService extends Service {
                 //  mPop.show();
             }
         });
-        floatView.setImageResource(R.drawable.btn_normal);
+        floatView.setImageResource(StaticData.icon[StaticData.position]);
         windowManager.addView(floatView, windowManagerParas);
 
 
