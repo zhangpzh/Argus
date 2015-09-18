@@ -388,7 +388,7 @@ public class NotepadService extends Service implements RemoveListener {
         // ����������������ʧ
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new ColorDrawable(0));
-        int selector;
+        final int selector;
         if (index == -1) {
             popupWindow.setAnimationStyle(R.style.mypopwindow_anim_style);
             selector = 250;
@@ -454,12 +454,19 @@ public class NotepadService extends Service implements RemoveListener {
                 else {
                     Empty_List_Textview.setVisibility(View.VISIBLE);
                 }
+                int tmpselector;
+                if (index == -1) {
+                    tmpselector = 500;
+                }
+                else {
+                    tmpselector = 0;
+                }
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
                         Notepad_Head.setVisibility(View.VISIBLE);
                         NotepadActivity.setVisibility(View.VISIBLE);
                     }
-                }, 500);
+                }, tmpselector);
 
             }
         });

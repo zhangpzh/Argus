@@ -56,6 +56,8 @@
             android:textSize="23dp"
             android:textColor="#000000"
             android:focusable="true"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:id="@+id/PopupWindow_New_Edittext" />
     </RelativeLayout>
 </RelativeLayout>

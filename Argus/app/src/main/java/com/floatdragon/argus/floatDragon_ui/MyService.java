@@ -8,9 +8,12 @@ import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
+
 import com.floatdragon.argus.R;
 
 /**
@@ -110,6 +113,9 @@ public class MyService extends Service {
 
 
     }
+
+
+
 
     public void isShow(boolean show){
         if(show == true) {

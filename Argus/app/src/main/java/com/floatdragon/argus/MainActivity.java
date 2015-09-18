@@ -46,7 +46,6 @@ public class MainActivity extends Activity {
     ArrayList<String> registered_pkgName;                                       //已设置快捷访问的应用包名列表 (包含 "NONE"--空包名)
 
     ArrayList<appInfo> registeredAppInfos;                                      //已设置快捷访问的应用列表 (包含 "NONE"--空包名)
-    ArrayList<appInfo> ownAppInfos;                                             //已设置快捷访问的应用列表 (不含 "NONE"--空包名)
     ArrayList<appInfo> allAppInfos ;                                            //系统中所有应用列表
     ArrayList<appInfo> leftAppInfos;                                            //没有加入快捷访问的应用列表
 
@@ -138,7 +137,7 @@ public class MainActivity extends Activity {
         registered_pkgName = readSettings();
 
         /*
-           1. 根据包名列表, 初始化 registeredAppInfos、ownAppInfos
+           1. 根据包名列表, 初始化 registeredAppInfos
            2. 将应用的图标显示在 6 个圆圈当中
         */
         showRegisteredAppsInCircles();
@@ -151,7 +150,7 @@ public class MainActivity extends Activity {
 
         /* 更新全局静态变量 appsNotRegistered、appsRegistered、allAppsInfo */
         usedForUpdateGlobals.updateAppsNotRegistered(leftAppInfos);
-        usedForUpdateGlobals.updateAppsRegistered(ownAppInfos);
+        usedForUpdateGlobals.updateAppsRegistered(registeredAppInfos);
         usedForUpdateGlobals.updateAllApssInfo(allAppInfos);
 
         /* 用全局静态列表 storeGlobalValue 中的 appsNotRegistered 中的信息填充 pGridView */
@@ -183,18 +182,12 @@ public class MainActivity extends Activity {
             editor.putInt("count",0);
             editor.commit();
             for(int i = 0 ; i < 6 ; i ++)
-            {
                 records.add("NONE");
-            }
+            return records;
         }
         //preferences 文件存在 读取其中的 包名
-        else
-        {
-            for(int i = 1 ; i <= cnt ; i ++)
-            {
-                records.add(preferences.getString("pkgName"+i,"NONE"));
-            }
-        }
+        for(int i = 1 ; i <= cnt ; i ++)
+            records.add(preferences.getString("pkgName"+i,"NONE"));
         return records;
     }
 
@@ -210,12 +203,6 @@ public class MainActivity extends Activity {
         else
             registeredAppInfos = new ArrayList<appInfo>();
 
-        //初始化 ownAppInfos
-        if(ownAppInfos != null)
-            ownAppInfos.clear();
-        else
-            ownAppInfos = new ArrayList<appInfo>();
-
         for(int i = 0 ; i < registered_pkgName.size() ; i ++)
         {
             String tmpPkgName = registered_pkgName.get(i);
@@ -224,15 +211,10 @@ public class MainActivity extends Activity {
 
             //若包名为 "NONE" 则表明对应圆圈为空, 不设图标
             if(tmpPkgName.equals("NONE"))
-            {
                 appInformation.setEmpty();
-            }
             //根据包名得到所有信息
             else
-            {
                 appInformation.getAll(tmpPkgName);
-                ownAppInfos.add(appInformation);
-            }
             registeredAppInfos.add(appInformation);
         }
 
@@ -411,7 +393,7 @@ public class MainActivity extends Activity {
                1. 将 boolean toBeRemoved[] 中对应为 true 的图标在其圆圈中删除 -- 变为 add_file 图片, border变成普通颜色
                2. circleMode 从 removeMode 切换至 addMode
                3. 中间删除按钮消失
-               4. 更新列表: registered_pkgName、registeredAppInfos、ownAppInfos、leftAppInfos
+               4. 更新列表: registered_pkgName、registeredAppInfos、leftAppInfos
                5. 更新全局静态列表: appsNotRegistered、appsRegistered
                6. 将registered_pkgName 内容(包名,可能有"NONE") 写入到 配置文件 "FAST_ACCESS_REGISTERED" 中
                7. boolean toBeRemoved[] 全部设为 false, int removeAppsNum 设为 0
@@ -435,22 +417,12 @@ public class MainActivity extends Activity {
             //3. 中间删除按钮消失
             MiddleDeleteButton.setVisibility(View.INVISIBLE);
 
-            //4. 更新列表: registered_pkgName、registeredAppInfos、ownAppInfos、leftAppInfos
+            //4. 更新列表: registered_pkgName、registeredAppInfos、leftAppInfos
             for(int i = 0 ; i < 6 ; i ++)
             {
                 if(storeGlobalValue.toBeRemoved[i] == true)
                 {
-
-                    //ownAppInfos
                     String tmpPkgName = registered_pkgName.get(i);
-                    for(int j = 0 ; j < ownAppInfos.size() ; j ++)
-                    {
-                        if(ownAppInfos.get(j).getAppPkgName().equals(tmpPkgName))
-                        {
-                            ownAppInfos.remove(j);
-                            break;
-                        }
-                    }
 
                     //registered_pkgName
                     registered_pkgName.set(i,"NONE");
@@ -467,7 +439,7 @@ public class MainActivity extends Activity {
                 }
             }
 
-            //5. 更新全局静态列表: appsNotRegistered、appsRegistered、allAppsInfo
+            //5. 更新全局静态列表: appsNotRegistered、appsRegistered、appsRegisteredContainEmpty
             usedForUpdateGlobals.updateAppsRegistered(registeredAppInfos);
             usedForUpdateGlobals.updateAppsNotRegistered(leftAppInfos);
 
@@ -482,7 +454,7 @@ public class MainActivity extends Activity {
     /*
         监听器: pGridView中 item 的监听事件
             1. 在圆圈 "numOfCircleToSelectApp" 中显示此 item 的 icon
-            2. 更新列表: registered_pkgName、registeredAppInfos、ownAppInfos、allAppInfos、leftAppInfos
+            2. 更新列表: registered_pkgName、registeredAppInfos、allAppInfos、leftAppInfos
             3. 更新全局静态列表: appsNotRegistered、appsRegistered、allAppsInfo
             4. 将registeredAppInfos 中的包名写入到 配置文件 "FAST_ACCESS_REGISTERED" 中
             5. 设置 pGridView 消失不可见
@@ -496,12 +468,11 @@ public class MainActivity extends Activity {
             Drawable correspondingDrawable = correspondingImageView.getDrawable();
             circles[numOfCircleToSelectApp].setDrawable(correspondingDrawable);
 
-            //2. 更新列表: registered_pkgName、registeredAppInfos、ownAppInfos、leftAppInfos
+            //2. 更新列表: registered_pkgName、registeredAppInfos、leftAppInfos
             appInfo selectedAppInfo = leftAppInfos.get(i);
 
             registered_pkgName.set(numOfCircleToSelectApp,selectedAppInfo.getAppPkgName());
             registeredAppInfos.set(numOfCircleToSelectApp,selectedAppInfo);
-            ownAppInfos.add(selectedAppInfo);
             leftAppInfos.remove(i);
 
             //3. 更新全局静态列表: appsNotRegistered、appsRegistered
