@@ -70,6 +70,9 @@ public class MainActivity extends Activity {
     public ArrayList<appInfo> getRegisteredAppInfos() {
         return registeredAppInfos;
     }
+    private DevicePolicyManager policyManager;                  //create by  zouy
+
+    private ComponentName componentName;                        //create by  zouy
 
     //桌面小圆点的开关
     private Switch aSwitch;
@@ -78,7 +81,16 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //create by  zouy
+        //申请权限
+        policyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+        componentName = new ComponentName(this, LockReceiver.class);
 
+        if (policyManager.isAdminActive(componentName)) {	//判断是否有权限(激活了设备管理器)
+        }else{
+            activeManager();//激活设备管理器获取权限
+        }
+        //
         /* 初始化为-1, 表示没有空圆圈触发选择app事件 */
         numOfCircleToSelectApp = -1;
 
@@ -212,7 +224,7 @@ public class MainActivity extends Activity {
             //若包名为 "NONE" 则表明对应圆圈为空, 不设图标
             if(tmpPkgName.equals("NONE"))
                 appInformation.setEmpty();
-            //根据包名得到所有信息
+                //根据包名得到所有信息
             else
                 appInformation.getAll(tmpPkgName);
             registeredAppInfos.add(appInformation);
@@ -577,5 +589,13 @@ public class MainActivity extends Activity {
                 return true;
         }
         return false;
+    }
+
+    private void activeManager() {
+        //使用隐式意图调用系统方法来激活指定的设备管理器
+        Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
+        intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "一键锁屏");
+        startActivity(intent);
     }
 }
