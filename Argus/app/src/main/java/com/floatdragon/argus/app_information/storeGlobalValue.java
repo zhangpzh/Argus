@@ -2,6 +2,9 @@ package com.floatdragon.argus.app_information;
 
 import android.widget.Switch;
 
+import com.floatdragon.argus.floatDragon_ui.StaticData;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +25,7 @@ public class storeGlobalValue {
     public static int removeAppsNum;
 
     public static ArrayList<appInfo> appsNotRegistered;             //没有注册快捷访问的应用列表
-    public static ArrayList<appInfo> appsRegistered;                //已注册快捷访问的应用列表 (不含 "NONE"--空包名, 使用ownAppInfos更新)
+    public static ArrayList<appInfo> appsRegistered;                //已注册快捷访问的应用列表 (含 "NONE"--空包名, 使用 registeredAppInfos 更新)
     public static ArrayList<appInfo> allAppsInfo;                   //手机中所有应用的列表
 
     public storeGlobalValue() {

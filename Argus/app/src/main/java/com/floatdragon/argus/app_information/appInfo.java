@@ -101,7 +101,9 @@ public class appInfo {
 
         //通过getPackageManager()的queryIntentActivities方法遍历
         List<ResolveInfo> resolveInfoList = appPackageManager.queryIntentActivities(resolveIntent, 0);
-        ResolveInfo resolveInfo = resolveInfoList.iterator().next();
+        ResolveInfo resolveInfo = null;
+        if (resolveInfoList.iterator().hasNext())
+            resolveInfo = resolveInfoList.iterator().next();
 
         if (resolveInfo != null) {
             // newPackageName = packagename

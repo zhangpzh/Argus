@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
@@ -24,21 +25,18 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-
-import com.floatdragon.argus.MainActivity;
-import com.floatdragon.argus.app_information.appInfo;
 
 import com.floatdragon.argus.R;
+import com.floatdragon.argus.app_information.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ItService extends Service
 {
     int ClickT = 0;
     int appInfoSize = 0;
-
+    final String FAST_ACCESS_REGISTERED = "FAST_ACCESS_REGISTERED";      //存储快捷访问应用包名的设置文件
     //定义浮动窗口布局
     GridLayout mFloatLayout;
     WindowManager.LayoutParams wmParams;
@@ -61,6 +59,7 @@ public class ItService extends Service
     }
 
     ArrayList<appInfo> appInfos = null;
+    ArrayList<appInfo> registeredAppInfos;
 
     @Override
     public void onCreate()
@@ -105,12 +104,20 @@ public class ItService extends Service
         wmParams.width = 600;
         wmParams.height = 600;
 
-        final LayoutInflater inflater = LayoutInflater.from(getApplication());
+        LayoutInflater inflater = LayoutInflater.from(getApplication());
         //获取浮动窗口视图所在布局
         mFloatLayout = (GridLayout) inflater.inflate(R.layout.float_layout, null);
         mFloatLayout.getBackground().setAlpha(100);
 
-        appInfos =  MainActivity.getMainActivity().getRegisteredAppInfos();//error
+
+       // appInfos =  MainActivity.getMainActivity().getRegisteredAppInfos();
+
+        showRegisteredAppInGridView( readSettings() );
+        appInfos = registeredAppInfos;
+
+
+
+
         //添加mFloatLayout
         mWindowManager.addView(mFloatLayout, wmParams);
 
@@ -128,9 +135,6 @@ public class ItService extends Service
         appInfoSize = appInfos.size();
 
         switch (appInfoSize) {
-            default:
-                mFloatView7.setVisibility(View.VISIBLE);
-                mFloatView7.setBackground(appInfos.get(6).getAppIcon());
             case 6:
                 mFloatView.setVisibility(View.VISIBLE);
                 mFloatView.setBackground(appInfos.get(0).getAppIcon());
@@ -178,9 +182,6 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(0).getAppIntent();
-                    if(intent == null)
-                        return;
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
 
@@ -197,9 +198,6 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(1).getAppIntent();
-                    if(intent == null)
-                        return;
-                   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
             }
@@ -215,9 +213,6 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(5).getAppIntent();
-                    if(intent == null)
-                        return;
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
             }
@@ -233,9 +228,6 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(2).getAppIntent();
-                    if(intent == null)
-                        return;
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
             }
@@ -251,10 +243,6 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(4).getAppIntent();
-                    if(intent == null)
-                        return;
-
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
             }
@@ -272,9 +260,6 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(3).getAppIntent();
-                    if(intent == null)
-                        return;
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
             }
@@ -293,14 +278,88 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(6).getAppIntent();
-                    if(intent == null)
-                        return;
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
             }
         });
 
+    }
+
+
+    private ArrayList<String> readSettings() {
+        SharedPreferences preferences;
+        SharedPreferences.Editor editor;
+        ArrayList<String> records = new ArrayList<String>();
+
+        preferences = getSharedPreferences(FAST_ACCESS_REGISTERED,MODE_PRIVATE);
+        editor = preferences.edit();
+
+        int cnt = preferences.getInt("count", -1);
+
+        //preferences 文件不存在 创建一个空的 preferences 文件
+        if(cnt == -1)
+        {
+            editor.putInt("count",0);
+            editor.commit();
+        }
+        //preferences 文件存在 读取其中的 包名
+        else
+        {
+            for(int i = 1 ; i <= cnt ; i ++)
+            {
+                records.add(preferences.getString("pkgName"+i,"none"));
+            }
+
+            /*
+
+            打 log
+            System.out.println("records 中显示的包名顺序: ");
+            for(Iterator it = records.iterator() ; it.hasNext();)
+            {
+                String tmpStr = new String((String)it.next());
+                System.out.println(tmpStr);
+            }
+
+            System.out.println();
+            System.out.println("preferences 文件中显示的包名顺序: ");
+            System.out.println("已注册的包名的个数为: "+cnt);
+            for(int i = 1 ; i <= cnt ; i ++)
+            {
+                System.out.println(preferences.getString("pkgName"+i,"none"));
+            }
+            */
+        }
+        return records;
+    }
+    void showRegisteredAppInGridView(ArrayList<String> registered_pkgName) {
+
+        //初始化 registeredAppInfos
+        if(registeredAppInfos != null)
+            registeredAppInfos.clear();
+        else
+            registeredAppInfos = new ArrayList<appInfo>();
+
+        for(int i = 0 ; i < registered_pkgName.size() ; i ++)
+        {
+            String tmpPkgName = registered_pkgName.get(i);
+
+            //新建一个appInfo类型变量，得到所有信息，加入registeredAppInfos
+            appInfo appInformation = new appInfo(ItService.this);
+            appInformation.getAll(tmpPkgName);
+            registeredAppInfos.add(appInformation);
+        }
+
+        //打 log
+        //System.out.println("registeredAppInfos 列表中已注册包名显示的顺序: ");
+//        for(Iterator it = registeredAppInfos.iterator(); it.hasNext();)
+//        {
+//            String pkgName = ((appInfo)it.next()).getAppName();
+//            System.out.println(pkgName);
+//        }
+
+//        wrapAppInfosIntoAdapter willGetAdapter = new wrapAppInfosIntoAdapter(ItService.this,"ItService");
+//        MyAdapter newMyAdapter = willGetAdapter.getAdapter(registeredAppInfos);
+//        p_gridView.setAdapter(newMyAdapter);
     }
 
 

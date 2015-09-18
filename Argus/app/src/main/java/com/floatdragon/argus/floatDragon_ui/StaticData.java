@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.floatdragon.argus.R;
+import com.floatdragon.argus.app_information.appInfo;
 
+import java.util.ArrayList;
 import java.util.logging.Handler;
 
 /**
