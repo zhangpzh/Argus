@@ -110,7 +110,7 @@ public class ItService extends Service
         mFloatLayout = (GridLayout) inflater.inflate(R.layout.float_layout, null);
         mFloatLayout.getBackground().setAlpha(100);
 
-        appInfos =  MainActivity.getMainActivity().getRegisteredAppInfos();
+        appInfos =  MainActivity.getMainActivity().getRegisteredAppInfos();//error
         //添加mFloatLayout
         mWindowManager.addView(mFloatLayout, wmParams);
 
@@ -180,6 +180,7 @@ public class ItService extends Service
                     Intent intent = appInfos.get(0).getAppIntent();
                     if(intent == null)
                         return;
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
 
@@ -198,6 +199,7 @@ public class ItService extends Service
                     Intent intent = appInfos.get(1).getAppIntent();
                     if(intent == null)
                         return;
+                   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
             }
@@ -215,6 +217,7 @@ public class ItService extends Service
                     Intent intent = appInfos.get(5).getAppIntent();
                     if(intent == null)
                         return;
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
             }
@@ -232,6 +235,7 @@ public class ItService extends Service
                     Intent intent = appInfos.get(2).getAppIntent();
                     if(intent == null)
                         return;
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
             }
@@ -249,6 +253,8 @@ public class ItService extends Service
                     Intent intent = appInfos.get(4).getAppIntent();
                     if(intent == null)
                         return;
+
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
             }
@@ -268,6 +274,7 @@ public class ItService extends Service
                     Intent intent = appInfos.get(3).getAppIntent();
                     if(intent == null)
                         return;
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
             }
@@ -288,6 +295,7 @@ public class ItService extends Service
                     Intent intent = appInfos.get(6).getAppIntent();
                     if(intent == null)
                         return;
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 //                }
             }
