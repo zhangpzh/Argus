@@ -1,0 +1,166 @@
+Applications Memory Usage (kB):
+Uptime: 91075249 Realtime: 110191909
+
+Total PSS by process:
+    93766 kB: com.floatdragon.argus (pid 30164 / activities)
+    83550 kB: com.android.systemui (pid 953)
+    68897 kB: com.miui.home (pid 1190 / activities)
+    68077 kB: com.android.settings (pid 1236)
+    61759 kB: system (pid 879)
+    37243 kB: com.google.android.inputmethod.pinyin (pid 1067)
+    33153 kB: surfaceflinger (pid 181)
+    22602 kB: com.wandoujia.phoenix2 (pid 13454)
+    20436 kB: com.example.yaoyiyao (pid 21335 / activities)
+    17708 kB: com.xiaomi.market (pid 12415)
+    16993 kB: com.ogaclejapan.arclayout.demo (pid 12197 / activities)
+    14909 kB: mediaserver (pid 184)
+    14590 kB: android.process.acore (pid 28371)
+    12864 kB: android.process.media (pid 1020)
+    12441 kB: com.wandoujia.phoenix2.usbproxy (pid 13392)
+    12354 kB: com.netease.newsreader.activity (pid 25267)
+    11291 kB: com.wandoujia.phoenix2:update_service (pid 13540)
+     9465 kB: com.nvidia.NvCPLSvc (pid 1113)
+     9459 kB: com.trafficctr.miui (pid 1125)
+     9104 kB: com.xiaomi.gamecenter.pad (pid 30066)
+     8964 kB: com.android.bluetooth (pid 1571)
+     7573 kB: com.android.phone (pid 1098)
+     7529 kB: com.xiaomi.dm (pid 12238)
+     6990 kB: com.xiaomi.xmsf (pid 1173)
+     6528 kB: com.miui.whetstone (pid 1144)
+     6081 kB: com.miui.sdk (pid 1037)
+     6075 kB: zygote (pid 182)
+     5839 kB: com.android.updater (pid 24200)
+     5565 kB: com.nvwfd.server.internal.protocols (pid 12182)
+     5074 kB: com.android.defcontainer (pid 1423)
+     4904 kB: com.nextdev.alarm:refreshwidget (pid 12154)
+     4804 kB: com.amap.android.location (pid 1161)
+     4756 kB: com.miui.providers.weather (pid 1661)
+     4728 kB: com.nvidia.NvWFDSvc (pid 12267)
+     4572 kB: com.android.thememanager (pid 30180)
+     3818 kB: com.xiaomi.account (pid 30231)
+     3623 kB: com.android.quicksearchbox (pid 30133)
+     3267 kB: sdcard (pid 247)
+     2678 kB: com.nextdev.alarm:alarmwidgetremote (pid 30210)
+     2464 kB: shelld (pid 204)
+      806 kB: drmserver (pid 183)
+      527 kB: adbd (pid 281)
+      516 kB: netd (pid 179)
+      464 kB: mdbd (pid 280)
+      459 kB: vold (pid 177)
+      442 kB: /init (pid 1)
+      435 kB: ussrd (pid 195)
+      430 kB: keystore (pid 188)
+      430 kB: mcd (pid 1428)
+      328 kB: ueventd (pid 140)
+      277 kB: wlbwservice (pid 196)
+      263 kB: powerservice (pid 197)
+      259 kB: sdcard (pid 1332)
+      202 kB: immvibed (pid 283)
+      197 kB: installd (pid 186)
+      169 kB: dumpsys (pid 30249)
+      164 kB: logcat (pid 30005)
+      146 kB: uuids_sys (pid 13539)
+      136 kB: healthd (pid 174)
+      131 kB: debuggerd (pid 180)
+      122 kB: otad (pid 189)
+      114 kB: servicemanager (pid 176)
+
+Total PSS by OOM adjustment:
+    66885 kB: Native
+               33153 kB: surfaceflinger (pid 181)
+               14909 kB: mediaserver (pid 184)
+                6075 kB: zygote (pid 182)
+                3267 kB: sdcard (pid 247)
+                2464 kB: shelld (pid 204)
+                 806 kB: drmserver (pid 183)
+                 527 kB: adbd (pid 281)
+                 516 kB: netd (pid 179)
+                 464 kB: mdbd (pid 280)
+                 459 kB: vold (pid 177)
+                 442 kB: /init (pid 1)
+                 435 kB: ussrd (pid 195)
+                 430 kB: keystore (pid 188)
+                 430 kB: mcd (pid 1428)
+                 328 kB: ueventd (pid 140)
+                 277 kB: wlbwservice (pid 196)
+                 263 kB: powerservice (pid 197)
+                 259 kB: sdcard (pid 1332)
+                 202 kB: immvibed (pid 283)
+                 197 kB: installd (pid 186)
+                 169 kB: dumpsys (pid 30249)
+                 164 kB: logcat (pid 30005)
+                 146 kB: uuids_sys (pid 13539)
+                 136 kB: healthd (pid 174)
+                 131 kB: debuggerd (pid 180)
+                 122 kB: otad (pid 189)
+                 114 kB: servicemanager (pid 176)
+    61759 kB: System
+               61759 kB: system (pid 879)
+   134450 kB: Persistent
+               83550 kB: com.android.systemui (pid 953)
+                9465 kB: com.nvidia.NvCPLSvc (pid 1113)
+                9459 kB: com.trafficctr.miui (pid 1125)
+                7573 kB: com.android.phone (pid 1098)
+                6990 kB: com.xiaomi.xmsf (pid 1173)
+                6528 kB: com.miui.whetstone (pid 1144)
+                6081 kB: com.miui.sdk (pid 1037)
+                4804 kB: com.amap.android.location (pid 1161)
+   166599 kB: Foreground
+               93766 kB: com.floatdragon.argus (pid 30164 / activities)
+               68077 kB: com.android.settings (pid 1236)
+                4756 kB: com.miui.providers.weather (pid 1661)
+    14038 kB: Visible
+                8964 kB: com.android.bluetooth (pid 1571)
+                5074 kB: com.android.defcontainer (pid 1423)
+   106140 kB: Perceptible
+               68897 kB: com.miui.home (pid 1190 / activities)
+               37243 kB: com.google.android.inputmethod.pinyin (pid 1067)
+    30572 kB: A Services
+               17708 kB: com.xiaomi.market (pid 12415)
+               12864 kB: android.process.media (pid 1020)
+    74812 kB: B Services
+               22602 kB: com.wandoujia.phoenix2 (pid 13454)
+               12354 kB: com.netease.newsreader.activity (pid 25267)
+               11291 kB: com.wandoujia.phoenix2:update_service (pid 13540)
+                7529 kB: com.xiaomi.dm (pid 12238)
+                5839 kB: com.android.updater (pid 24200)
+                5565 kB: com.nvwfd.server.internal.protocols (pid 12182)
+                4904 kB: com.nextdev.alarm:refreshwidget (pid 12154)
+                4728 kB: com.nvidia.NvWFDSvc (pid 12267)
+    88255 kB: Cached
+               20436 kB: com.example.yaoyiyao (pid 21335 / activities)
+               16993 kB: com.ogaclejapan.arclayout.demo (pid 12197 / activities)
+               14590 kB: android.process.acore (pid 28371)
+               12441 kB: com.wandoujia.phoenix2.usbproxy (pid 13392)
+                9104 kB: com.xiaomi.gamecenter.pad (pid 30066)
+                4572 kB: com.android.thememanager (pid 30180)
+                3818 kB: com.xiaomi.account (pid 30231)
+                3623 kB: com.android.quicksearchbox (pid 30133)
+                2678 kB: com.nextdev.alarm:alarmwidgetremote (pid 30210)
+
+Total PSS by category:
+   246847 kB: Dalvik
+   158776 kB: Native
+   121474 kB: .so mmap
+    77690 kB: Other dev
+    63577 kB: Dalvik Other
+    39009 kB: .dex mmap
+    14954 kB: .apk mmap
+     8364 kB: Stack
+     7392 kB: Unknown
+     2663 kB: Other mmap
+     2428 kB: .ttf mmap
+      140 kB: .jar mmap
+      136 kB: Ashmem
+       60 kB: Cursor
+        0 kB: code mmap
+        0 kB: image mmap
+        0 kB: Graphics
+        0 kB: GL
+        0 kB: Memtrack
+
+Total RAM: 1975992 kB
+ Free RAM: 695071 kB (88255 cached pss + 299504 cached + 307312 free)
+ Used RAM: 827667 kB (655255 used pss + 110780 buffers + 460 shmem + 61172 slab)
+ Lost RAM: 453254 kB
+   Tuning: 192 (large 448), oom 122880 kB, restore limit 40960 kB (high-end-gfx)
