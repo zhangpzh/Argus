@@ -358,7 +358,7 @@ public class MainActivity extends Activity {
             }
             else
             {
-                if(registered_pkgName.get(tmpView.number) == null || registered_pkgName.get( tmpView.number).equals("NONE") == false)   //error
+                if( registered_pkgName.get( tmpView.number).equals("NONE") == false)   //error
                 {
                     return;
                 }
