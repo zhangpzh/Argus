@@ -56,6 +56,9 @@ public class RoundImageView extends ImageView {
     //圆圈的 border 是否已变绿
     public boolean isGreen;
 
+    //是否只需要重画 border
+    public boolean drawBorderOnly = false;
+
     public RoundImageView(Context context) {
         super(context);
         mContext = context;
@@ -90,19 +93,21 @@ public class RoundImageView extends ImageView {
     //将圆圈的 border 画成粗绿色
     public void turnGreen() {
         isGreen = true;
-        mBorderThickness = 2;
+        mBorderThickness = 4;
         mBorderOutsideColor = Color.GREEN;
         mBorderInsideColor = Color.GREEN;
+
+        //只用画内外 border 就好, 用不着整个 RoundImage 重画 */
+        drawBorderOnly = true;
         invalidate();
+        drawBorderOnly = false;
     }
 
     //把圆圈的 border 变回原来的样子
     public void turnNormal() {
         isGreen = false;
         mBorderThickness = storedBorderThickness;
-        mBorderOutsideColor = storedBorderOutsideColor;
-        mBorderInsideColor = storedBorderInsideColor;
-        invalidate();
+        drawGreyLayerOnly();
     }
 
     @Override
@@ -131,23 +136,37 @@ public class RoundImageView extends ImageView {
             defaultHeight = getHeight();
         }
         int radius = 0;
-        if (mBorderInsideColor != defaultColor && mBorderOutsideColor != defaultColor) {// 定义画两个边框，分别为外圆边框和内圆边框
+
+        if (mBorderInsideColor != defaultColor && mBorderOutsideColor != defaultColor)
+        {// 定义画两个边框，分别为外圆边框和内圆边框
             radius = (defaultWidth < defaultHeight ? defaultWidth : defaultHeight) / 2 - 2 * mBorderThickness;
             // 画内圆
             drawCircleBorder(canvas, radius + mBorderThickness / 2, mBorderInsideColor);
             // 画外圆
             drawCircleBorder(canvas, radius + mBorderThickness + mBorderThickness / 2, mBorderOutsideColor);
-        } else if (mBorderInsideColor != defaultColor && mBorderOutsideColor == defaultColor) {// 定义画一个边框
+        }
+
+        else if (mBorderInsideColor != defaultColor && mBorderOutsideColor == defaultColor)
+        {// 定义画一个边框
             radius = (defaultWidth < defaultHeight ? defaultWidth : defaultHeight) / 2 - mBorderThickness;
             drawCircleBorder(canvas, radius + mBorderThickness / 2, mBorderInsideColor);
-        } else if (mBorderInsideColor == defaultColor && mBorderOutsideColor != defaultColor) {// 定义画一个边框
+        }
+
+        else if (mBorderInsideColor == defaultColor && mBorderOutsideColor != defaultColor)
+        {// 定义画一个边框
             radius = (defaultWidth < defaultHeight ? defaultWidth : defaultHeight) / 2 - mBorderThickness;
             drawCircleBorder(canvas, radius + mBorderThickness / 2, mBorderOutsideColor);
-        } else {// 没有边框
+        }
+
+        else
+        {// 没有边框
             radius = (defaultWidth < defaultHeight ? defaultWidth : defaultHeight) / 2;
         }
-        Bitmap roundBitmap = getCroppedRoundBitmap(bitmap, radius);
-        canvas.drawBitmap(roundBitmap, defaultWidth / 2 - radius, defaultHeight / 2 - radius, null);
+        if(drawBorderOnly == false)
+        {
+            Bitmap roundBitmap = getCroppedRoundBitmap(bitmap, radius);
+            canvas.drawBitmap(roundBitmap, defaultWidth / 2 - radius, defaultHeight / 2 - radius, null);
+        }
     }
 
     /**
@@ -227,5 +246,23 @@ public class RoundImageView extends ImageView {
         notDefault = true;
         mDrawable = tmpDrawable;
         invalidate();
+    }
+
+    //只画内层黑色 border
+    public void drawBlackLayerOnly() {
+        mBorderOutsideColor = defaultColor;
+        mBorderInsideColor = 0xFF000000;
+        drawBorderOnly = true;
+        invalidate();
+        drawBorderOnly = false;
+    }
+
+    //只画外层为灰色的 border
+    public void drawGreyLayerOnly() {
+        mBorderOutsideColor = 0xFFA9A9A9;
+        mBorderInsideColor = defaultColor;
+        drawBorderOnly = true;
+        invalidate();
+        drawBorderOnly = false;
     }
 }
