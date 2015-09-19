@@ -182,6 +182,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(0).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
 
@@ -198,6 +200,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(1).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
             }
@@ -213,6 +217,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(5).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
             }
@@ -228,6 +234,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(2).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
             }
@@ -243,6 +251,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(4).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
             }
@@ -260,6 +270,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(3).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
             }
@@ -278,6 +290,8 @@ public class ItService extends Service
 //                }
 //                else{
                     Intent intent = appInfos.get(6).getAppIntent();
+                    if(intent == null)
+                        return;
                     startActivity(intent);
 //                }
             }
@@ -362,9 +376,6 @@ public class ItService extends Service
 //        p_gridView.setAdapter(newMyAdapter);
     }
 
-
-
-
     @Override
     public void onDestroy()
     {
@@ -376,5 +387,4 @@ public class ItService extends Service
             mWindowManager.removeView(mFloatLayout);
         }
     }
-
 }

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:imagecontrol="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <!-- comet imageview , "assistant switch" , switch -->
+    <RelativeLayout
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:id="@+id/FirstRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="0"
+        android:gravity="center_vertical"
+        >
+        <!--Remember to shrink the image-->
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/comet"
+            android:id="@+id/comet_icon"
+            />
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Float  Dragon"
+            android:textSize="10pt"
+            android:layout_marginLeft="50dp"
+            android:layout_alignTop="@+id/comet_icon"
+            />
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:id="@+id/serviceSwitchButton"
+            />
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4px"
+        android:background="@drawable/divide_line_shape"
+        android:layout_below="@+id/FirstRelativeLayout"
+        />
+
+    <RelativeLayout
+        android:paddingTop="3dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:id="@+id/secondRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_weight="0"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/FirstRelativeLayout"
+        >
+        <!--Remember to shrink the image-->
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/blue_star"
+            android:id="@+id/blue_star"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Magic Circles"
+            android:textSize="10pt"
+            android:layout_marginLeft="50dp"
+            android:layout_alignTop="@+id/blue_star"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_weight="0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:id="@+id/ThirdRelativeLayout"
+        >
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="221.710dp"
+            android:layout_height="247.5dp"
+            android:id="@+id/circleLayout"
+            >
+            <com.floatdragon.argus.app_shown.RoundImageView
+                android:id="@+id/circle1"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginLeft="83.355dp"
+                android:src="@drawable/add_file"
+                imagecontrol:border_inside_color="#000000"
+                imagecontrol:border_outside_color="#a9a9a9"
+                imagecontrol:border_thickness="0.5dp"
+                />
+
+            <com.floatdragon.argus.app_shown.RoundImageView
+                android:id="@+id/circle2"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="48.125dp"
+                android:src="@drawable/add_file"
+                imagecontrol:border_inside_color="#000000"
+                imagecontrol:border_outside_color="#a9a9a9"
+                imagecontrol:border_thickness="0.5dp"
+                />
+            <com.floatdragon.argus.app_shown.RoundImageView
+                android:id="@+id/circle3"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="48.125dp"
+                android:src="@drawable/add_file"
+                imagecontrol:border_inside_color="#000000"
+                imagecontrol:border_outside_color="#a9a9a9"
+                imagecontrol:border_thickness="0.5dp"
+                />
+            <com.floatdragon.argus.app_shown.RoundImageView
+                android:id="@+id/circle4"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="0dp"
+                android:src="@drawable/add_file"
+                android:layout_marginLeft="83.355dp"
+                imagecontrol:border_inside_color="#000000"
+                imagecontrol:border_outside_color="#a9a9a9"
+                imagecontrol:border_thickness="0.5dp"
+                />
+            <com.floatdragon.argus.app_shown.RoundImageView
+                android:id="@+id/circle5"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/add_file"
+                android:layout_marginBottom="48.125dp"
+                imagecontrol:border_inside_color="#000000"
+                imagecontrol:border_outside_color="#a9a9a9"
+                imagecontrol:border_thickness="0.5dp"
+                />
+
+            <com.floatdragon.argus.app_shown.RoundImageView
+                android:id="@+id/circle6"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="48.125dp"
+                android:src="@drawable/add_file"
+                imagecontrol:border_inside_color="#000000"
+                imagecontrol:border_outside_color="#a9a9a9"
+                imagecontrol:border_thickness="0.5dp"
+                />
+
+            <com.floatdragon.argus.app_shown.RoundImageView
+                android:id="@+id/cancel_selection"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginLeft="83.355dp"
+                android:layout_marginTop="96.25dp"
+                android:src="@drawable/cross"
+                android:visibility="invisible"
+                imagecontrol:border_inside_color="#000000"
+                imagecontrol:border_outside_color="#a9a9a9"
+                imagecontrol:border_thickness="0.5dp"
+                />
+
+            <com.floatdragon.argus.app_shown.RoundImageView
+                android:id="@+id/throw_rubbish"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginLeft="83.355dp"
+                android:layout_marginTop="96.25dp"
+                android:src="@drawable/trash"
+                android:visibility="invisible"
+                imagecontrol:border_inside_color="#000000"
+                imagecontrol:border_outside_color="#a9a9a9"
+                imagecontrol:border_thickness="0.5dp"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:visibility="invisible"
+        android:id="@+id/select_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="select an app into circles"
+        android:textSize="8pt"
+        android:layout_below="@+id/ThirdRelativeLayout"
+        android:layout_alignLeft="@+id/MainActivityGridView"
+        android:textStyle="bold"
+        />
+
+    <GridView
+        android:layout_weight="1"
+        android:layout_below="@+id/select_textView"
+        android:id="@+id/MainActivityGridView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="afterDescendants"
+        android:gravity="center"
+        android:horizontalSpacing="2dp"
+        android:numColumns="3"
+        android:verticalSpacing="2dp"
+        android:visibility="invisible"
+        >
+    </GridView>
+
+</LinearLayout>

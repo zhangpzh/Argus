@@ -22,10 +22,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -37,8 +37,10 @@ import java.util.List;
 public class MainActivity extends Activity {
 
     private GridView pGridView;                                                 //选择app的网格
+    private TextView pSelectTextView;                                           //选择app时,网格上面的文字
     private RoundImageView circles[];                                           //存储圆圈的数组
-    private RoundImageView MiddleDeleteButton;                                  //中间删除按钮
+    private RoundImageView MiddleDeleteButton;                                  //中间删除按钮 -- 用于删除快捷访问设置
+    private RoundImageView MiddleCancelButton;                                  //中间取消按钮 -- 用于取消设置app的快捷访问
     private int numOfCircleToSelectApp;                                         //触发选择app事件的空圆圈的编号 (从0开始数)
 
     final String FAST_ACCESS_REGISTERED = "FAST_ACCESS_REGISTERED";             //存储快捷访问应用包名的设置文件
@@ -80,7 +82,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
         //create by  zouy
         //申请权限
         policyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
@@ -98,7 +100,8 @@ public class MainActivity extends Activity {
         usedForUpdateGlobals = new storeGlobalValue();
         usedForGetAdapter = new wrapAppInfosIntoAdapter(MainActivity.this,"MainActivity");
 
-        /* 找到布局中的组件 */
+        /* 找到网格和网格上面的文字 */
+        pSelectTextView = (TextView) findViewById(R.id.select_textView);
         pGridView = (GridView) findViewById(R.id.MainActivityGridView);
 
         circles = new RoundImageView[6];
@@ -109,9 +112,12 @@ public class MainActivity extends Activity {
         circles[4] = (RoundImageView) findViewById(R.id.circle5);
         circles[5] = (RoundImageView) findViewById(R.id.circle6);
 
-        /* 找到中间删除按钮, 并注册监听器 */
+        /* 找到中间删除按钮 和 中间取消按钮, 并注册监听器 */
         MiddleDeleteButton = (RoundImageView) findViewById(R.id.throw_rubbish);
         MiddleDeleteButton.setOnClickListener(new MiddleDeleteButtonOnClickListener());
+
+        MiddleCancelButton = (RoundImageView) findViewById(R.id.cancel_selection);
+        MiddleCancelButton.setOnClickListener(new MiddleCancelButtonOnClickListener());
 
         /* 初始化圆圈编号、注册监听器*/
         for(int i = 0 ; i < 6 ; i ++)
@@ -317,7 +323,8 @@ public class MainActivity extends Activity {
             若 circleMode 为 addMode:
                     若圆圈中不空,无效
                     若圆圈中为空:
-                            重刷 pGridView 并设置可见, 把当前圆圈的编号记录到 -> numOfCircleToSelectApp 中
+                            重刷 pGridView,并设置它 和 pSelectTextView 可见, 把当前圆圈的编号记录到 -> numOfCircleToSelectApp 中
+                            设置 中间取消按钮可见
      */
     public class RoundImageViewOnShortClickListener implements View.OnClickListener {
         @Override
@@ -356,10 +363,12 @@ public class MainActivity extends Activity {
                 {
                     return;
                 }
-                /* 用全局静态列表 storeGlobalValue 中的 appsNotRegistered 中的信息填充 pGridView 并设置可见 */
+                /* 用全局静态列表 storeGlobalValue 中的 appsNotRegistered 中的信息填充 pGridView 并设置它和 pSelectTextView 可见, 设置 中间取消按钮可见 */
                 pGridView.setAdapter(usedForGetAdapter.getAdapter(storeGlobalValue.appsNotRegistered));
                 pGridView.setVisibility(View.VISIBLE);
+                pSelectTextView.setVisibility(View.VISIBLE);
                 numOfCircleToSelectApp = tmpView.number;
+                MiddleCancelButton.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -463,13 +472,26 @@ public class MainActivity extends Activity {
         }
     }
 
+    //Don't forget to implement it !
+    /*
+        中间取消按钮的点击事件:
+               1. pSelectTextView, pGridView, 中间取消按钮消失
+    */
+    public class MiddleCancelButtonOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            pSelectTextView.setVisibility(View.INVISIBLE);
+            pGridView.setVisibility(View.INVISIBLE);
+            MiddleCancelButton.setVisibility(View.INVISIBLE);
+        }
+    }
     /*
         监听器: pGridView中 item 的监听事件
             1. 在圆圈 "numOfCircleToSelectApp" 中显示此 item 的 icon
             2. 更新列表: registered_pkgName、registeredAppInfos、allAppInfos、leftAppInfos
             3. 更新全局静态列表: appsNotRegistered、appsRegistered、allAppsInfo
             4. 将registeredAppInfos 中的包名写入到 配置文件 "FAST_ACCESS_REGISTERED" 中
-            5. 设置 pGridView 消失不可见
+            5. 设置 pGridView 和 pSelectTextView 和 MiddleCancelButton 消失不见
      */
     public class GridViewOnItemClickListener implements AdapterView.OnItemClickListener {
         @Override
@@ -494,8 +516,10 @@ public class MainActivity extends Activity {
             //4. 将registered_pkgName 内容(包名,可能有"NONE") 写入到 配置文件 "FAST_ACCESS_REGISTERED" 中
             writeSettingsFile();
 
-            //5. 设置 pGridView 消失不可见
+            //5. 设置 pGridView 和 pSelectTextView 和 MiddleCancelButton 消失不见
             pGridView.setVisibility(View.INVISIBLE);
+            pSelectTextView.setVisibility(View.INVISIBLE);
+            MiddleCancelButton.setVisibility(View.INVISIBLE);
         }
     }
 
