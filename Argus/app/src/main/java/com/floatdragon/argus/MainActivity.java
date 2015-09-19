@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -34,7 +35,7 @@ import java.util.List;
 
 
 //MainActivity
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity{
 
     private GridView pGridView;                                                 //选择app的网格
     private TextView pSelectTextView;                                           //选择app时,网格上面的文字
@@ -325,6 +326,7 @@ public class MainActivity extends Activity {
                     若圆圈中为空:
                             重刷 pGridView,并设置它 和 pSelectTextView 可见, 把当前圆圈的编号记录到 -> numOfCircleToSelectApp 中
                             设置 中间取消按钮可见
+                            selectingApp = true
      */
     public class RoundImageViewOnShortClickListener implements View.OnClickListener {
         @Override
@@ -369,12 +371,14 @@ public class MainActivity extends Activity {
                 pSelectTextView.setVisibility(View.VISIBLE);
                 numOfCircleToSelectApp = tmpView.number;
                 MiddleCancelButton.setVisibility(View.VISIBLE);
+                storeGlobalValue.selectingApp = true;
             }
         }
     }
 
     /*
         圆圈的长按监听器事件:
+            若已经在选择 app -- selectingApp = true, 无效
             若 circleMode 为 removeMode, 无效
             若 circleMode 为 addMode:
                     若圆圈中为空,无效
@@ -385,6 +389,8 @@ public class MainActivity extends Activity {
     public class RoundImageViewOnLongClickListener implements View.OnLongClickListener {
         @Override
         public boolean onLongClick(View v) {
+            if(storeGlobalValue.selectingApp == true)
+                return false;
             RoundImageView tmpView = (RoundImageView) v;
             if(storeGlobalValue.circleMode == storeGlobalValue.removeMode)
             {
@@ -475,7 +481,7 @@ public class MainActivity extends Activity {
     //Don't forget to implement it !
     /*
         中间取消按钮的点击事件:
-               1. pSelectTextView, pGridView, 中间取消按钮消失
+               1. pSelectTextView, pGridView, 中间取消按钮消失, selectingApp = false
     */
     public class MiddleCancelButtonOnClickListener implements View.OnClickListener {
         @Override
@@ -483,6 +489,7 @@ public class MainActivity extends Activity {
             pSelectTextView.setVisibility(View.INVISIBLE);
             pGridView.setVisibility(View.INVISIBLE);
             MiddleCancelButton.setVisibility(View.INVISIBLE);
+            storeGlobalValue.selectingApp = false;
         }
     }
     /*
@@ -492,6 +499,7 @@ public class MainActivity extends Activity {
             3. 更新全局静态列表: appsNotRegistered、appsRegistered、allAppsInfo
             4. 将registeredAppInfos 中的包名写入到 配置文件 "FAST_ACCESS_REGISTERED" 中
             5. 设置 pGridView 和 pSelectTextView 和 MiddleCancelButton 消失不见
+            6. selectingApp = false
      */
     public class GridViewOnItemClickListener implements AdapterView.OnItemClickListener {
         @Override
@@ -520,6 +528,9 @@ public class MainActivity extends Activity {
             pGridView.setVisibility(View.INVISIBLE);
             pSelectTextView.setVisibility(View.INVISIBLE);
             MiddleCancelButton.setVisibility(View.INVISIBLE);
+
+            //6. selectingApp = false
+            storeGlobalValue.selectingApp = false;
         }
     }
 

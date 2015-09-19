@@ -18,6 +18,10 @@ public class storeGlobalValue {
     //MainActivity 中圆圈的模式 circleMode: 0->addMode, 1->removeMode.
     public static final int addMode = 0;
     public static final int removeMode = 1;
+
+    //MainActivity 中是否正在选择需要快捷访问的 app
+    public static boolean selectingApp;
+
     public static int circleMode;
 
     //拟删除的 app 对应数组 toBeRemoved[], 和拟删除的 app 的数目 int removeAppsNum
@@ -29,6 +33,7 @@ public class storeGlobalValue {
     public static ArrayList<appInfo> allAppsInfo;                   //手机中所有应用的列表
 
     public storeGlobalValue() {
+        selectingApp = false;   //一开始没有在选择 app
         circleMode = addMode;   //初始化为 addMode -- 增加模式
         toBeRemoved = new boolean[6];
         for(int i = 0 ; i < 6 ; i ++)
