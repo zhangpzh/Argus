@@ -1,4 +1,4 @@
-package com.floatdragon.argus.floatDragon_ui;
+package com.floatdragon.argus.floatDragon_ui.float_circle;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -8,35 +8,33 @@ import android.widget.ImageButton;
 
 import com.floatdragon.argus.R;
 
-
 /**
- * Created by zouyun on 15/9/3.
+ * Created by zouyun on 15/9/10.
  */
-public class MoveButton extends ImageButton {
+public class NoteButton extends ImageButton {
 
-    public MoveButton(Context context) {
+    public NoteButton(Context context) {
         super(context);
-        setBackgroundResource(R.drawable.move);
+        setBackgroundResource(R.drawable.note);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnClickMethod.move_onClick();
-                Log.i("add_app", "call");
+                OnClickMethod.note_onClick();
+                Log.i("move", "call");
             }
         });
     }
 
 
-    public MoveButton(Context context, AttributeSet attributeSet) {
+    public NoteButton(final Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        setBackgroundResource(R.drawable.move);
+        setBackgroundResource(R.drawable.note);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnClickMethod.move_onClick();
-                Log.i("add_app", "call");
+                OnClickMethod.note_onClick();
+                Log.i("move", "call");
             }
         });
     }
-
 }

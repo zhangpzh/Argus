@@ -1,25 +1,13 @@
-package com.floatdragon.argus.floatDragon_ui;
+package com.floatdragon.argus.floatDragon_ui.float_circle;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.os.Message;
-import android.util.Log;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.Toast;
 
-import com.floatdragon.argus.MainActivity;
-
-import junit.framework.Test;
-
-import java.util.concurrent.locks.Lock;
+import com.floatdragon.argus.floatDragon_ui.Lock.LockReceiver;
+import com.floatdragon.argus.floatDragon_ui.MyService;
+import com.floatdragon.argus.floatDragon_ui.StaticData;
 
 /**
  * Created by zouyun on 15/9/8.

@@ -8,13 +8,14 @@ import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.floatdragon.argus.R;
+import com.floatdragon.argus.floatDragon_ui.float_circle.FloatApplication;
+import com.floatdragon.argus.floatDragon_ui.float_circle.FloatView;
+import com.floatdragon.argus.floatDragon_ui.notepad.NotepadService;
 
 /**
  * Created by zouyun on 15/8/13.

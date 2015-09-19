@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:name=".floatDragon_ui.FloatApplication">
+        android:name=".floatDragon_ui.float_circle.FloatApplication">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name="com.floatdragon.argus.floatDragon_ui.LockReceiver"
+            android:name=".floatDragon_ui.Lock.LockReceiver"
             android:description="@string/app_name"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_DEVICE_ADMIN" >
@@ -32,7 +32,7 @@
         </receiver>
         <service android:name=".floatDragon_ui.MyService"/>
         <service android:name=".floatDragon_ui.FxService"/>
-        <service android:name=".floatDragon_ui.NotepadService"/>
+        <service android:name=".floatDragon_ui.notepad.NotepadService"/>
         <service android:name=".floatDragon_ui.ItService"/>
     </application>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />

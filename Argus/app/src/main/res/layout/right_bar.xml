@@ -5,21 +5,21 @@
     android:id="@+id/left"
     android:layout_width="90dp"  android:layout_height="180dp"
     android:background="@drawable/right" >
-    <com.floatdragon.argus.floatDragon_ui.MoveButton
+    <com.floatdragon.argus.floatDragon_ui.float_circle.MoveButton
         android:id="@+id/right_left"
         app:layout_widthPercent="16%"
         app:layout_heightPercent="8%"
         android:layout_centerVertical="true"
         app:layout_marginPercent="10%"
         android:layout_alignParentLeft="true" />
-    <com.floatdragon.argus.floatDragon_ui.SettingButton
+    <com.floatdragon.argus.floatDragon_ui.float_circle.SettingButton
         android:id="@+id/right_top"
         app:layout_widthPercent="16%"
         app:layout_heightPercent="8%"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         app:layout_marginPercent="5%"/>
-    <com.floatdragon.argus.floatDragon_ui.AppButton
+    <com.floatdragon.argus.floatDragon_ui.float_circle.AppButton
         android:id="@+id/right_bottom"
         app:layout_widthPercent="16%"
         app:layout_heightPercent="8%"
@@ -28,7 +28,7 @@
         app:layout_marginPercent="5%"/>
 
 
-    <com.floatdragon.argus.floatDragon_ui.LockButton
+    <com.floatdragon.argus.floatDragon_ui.float_circle.LockButton
         android:id="@+id/right_lt"
         app:layout_widthPercent="16%"
         app:layout_heightPercent="8%"
@@ -36,7 +36,7 @@
 
         app:layout_marginTopPercent="18%"    app:layout_marginLeftPercent="33%" />
 
-    <com.floatdragon.argus.floatDragon_ui.NoteButton
+    <com.floatdragon.argus.floatDragon_ui.float_circle.NoteButton
         android:id="@+id/right_lb"
         app:layout_widthPercent="16%"
         app:layout_heightPercent="8%"

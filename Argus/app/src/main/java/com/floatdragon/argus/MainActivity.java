@@ -3,8 +3,9 @@ package com.floatdragon.argus;
 import com.floatdragon.argus.app_information.*;
 import com.floatdragon.argus.app_shown.RoundImageView;
 import com.floatdragon.argus.floatDragon_ui.*;
+import com.floatdragon.argus.floatDragon_ui.Lock.LockReceiver;
+import com.floatdragon.argus.switchbutton.SwitchButton;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
@@ -25,7 +26,6 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,7 +78,7 @@ public class MainActivity extends ActionBarActivity{
     private ComponentName componentName;                        //create by  zouy
 
     //桌面小圆点的开关
-    private Switch aSwitch;
+    private SwitchButton aSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +132,7 @@ public class MainActivity extends ActionBarActivity{
         pGridView.setOnItemClickListener(new GridViewOnItemClickListener());
 
         /* 为桌面小圆点开关绑定监听器 */
-        aSwitch = (Switch)findViewById(R.id.serviceSwitchButton);
+        aSwitch = (SwitchButton)findViewById(R.id.serviceSwitchButton);
         if(scaleTheService(MyService.class.getName()))
             aSwitch.setChecked(true);
         else
@@ -552,7 +552,6 @@ public class MainActivity extends ActionBarActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -598,19 +597,6 @@ public class MainActivity extends ActionBarActivity{
         return super.onKeyDown(keyCode, event);
     }
 
-    //锁屏功能
-    private void CallForAction() {
-        DevicePolicyManager policyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-        ComponentName componentName = new ComponentName(this, LockAdmin.class);
-
-        Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-
-        //权限列表
-        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName);
-
-        //描述(additional explanation)
-        intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "激活后才能使用锁屏功能哦亲^^");
-    }
 
     //create by zouyun
     //监听service是否运行
