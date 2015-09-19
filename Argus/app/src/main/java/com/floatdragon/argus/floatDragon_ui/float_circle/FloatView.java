@@ -79,6 +79,8 @@ public class FloatView extends ImageView {
                     updateViewPosition();
                     break;
                 }
+                if (y < top) y = rawY + 1;
+                if (y > frame.bottom) y = rawY - 1;
                 mx = x - rawX;
                 my = y - rawY;
                 dis = getDis(mx, my);
