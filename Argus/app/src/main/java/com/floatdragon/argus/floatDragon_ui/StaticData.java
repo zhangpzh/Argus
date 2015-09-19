@@ -17,7 +17,6 @@ import java.util.logging.Handler;
  * Created by zouyun on 15/9/3.
  */
 public  class StaticData {
-    public static Camera camera;
     public static boolean init = false;
     public static int screenWidth;
     public static int screenHeight;

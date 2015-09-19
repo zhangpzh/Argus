@@ -84,7 +84,6 @@ public class MainActivity extends ActionBarActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StaticData.camera = Camera.open();
         setContentView(R.layout.main_activity);
         //create by  zouy
         //申请权限
@@ -608,6 +607,7 @@ public class MainActivity extends ActionBarActivity{
                 exitTime = System.currentTimeMillis();
             } else {
                 // 关闭应用程序
+
                 finish();
                 // 返回桌面操作
                 // Intent home = new Intent(Intent.ACTION_MAIN);
