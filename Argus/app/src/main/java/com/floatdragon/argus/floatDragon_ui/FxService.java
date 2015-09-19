@@ -50,6 +50,7 @@ public class FxService extends Service
 {
 
     int ClickT = 0;
+    boolean longClicked,longClicked2;
     //定义浮动窗口布局
     LinearLayout mFloatLayout;
     PercentRelativeLayout mGridLayout;
@@ -200,25 +201,68 @@ public class FxService extends Service
         mBrightness.setBackground(getResources().getDrawable(R.drawable.brightness_most));
         mBrightness2.setBackground(getResources().getDrawable(R.drawable.brightness_low));
         refreshButton();
-        mBrightness.setOnClickListener(new OnClickListener() {
+        mBrightness.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    longClicked = true;
+                    //mBrightness.setBackgroundResource (R.drawable.?图标不够用了，我要去P个更亮的图标);//有这个函数你能不能别用setBackground了
+                    Thread t = new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+                            while (longClicked) {
+                                try {
+                                    setBrightStatus();
+                                    Thread.sleep(330);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    };
+                    t.start();
 
-                setBrightStatus();
-            }
-        });
-        mBrightness.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view){
-                setBrightStatus();
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    // mBrightness.setBackgroundResource (R.drawable.);//
+                    longClicked = false;
+//                    StaticData.isShow = 0;
+//                    MyService.getMyService().isShow(false);
+                }
                 return true;
+
             }
         });
-        mBrightness2.setOnClickListener(new OnClickListener() {
+        mBrightness2.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    longClicked2 = true;
+                    //mBrightness.setBackgroundResource (R.drawable.?图标不够用了，我要去P个更亮的图标);//有这个函数你能不能别用setBackground了
+                    Thread t2 = new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+                            while (longClicked2) {
+                                try {
+                                    setBrightStatus2();
+                                    Thread.sleep(330);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    };
+                    t2.start();
 
-                setBrightStatus2();
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    // mBrightness.setBackgroundResource (R.drawable.);//
+                    longClicked2 = false;
+//                    StaticData.isShow = 0;
+//                    MyService.getMyService().isShow(false);
+                }
+                return true;
+
             }
         });
 
@@ -657,14 +701,15 @@ public class FxService extends Service
                 light = LIGHT_100_PERCENT - 1;
                 break;
             case LIGHT_100_PERCENT:
-                startAutoBrightness(getContentResolver());
+                light = LIGHT_100_PERCENT - 1;
+                //   startAutoBrightness(getContentResolver());
                 break;
             case LIGHT_AUTO:
-                light = LIGHT_NORMAL - 1;
-                stopAutoBrightness(getContentResolver());
+                light = LIGHT_100_PERCENT - 1;
+                //  stopAutoBrightness(getContentResolver());
                 break;
             case LIGHT_ERR:
-                light = LIGHT_NORMAL - 1;
+                light = LIGHT_100_PERCENT - 1;
                 break;
 
         }
@@ -679,7 +724,8 @@ public class FxService extends Service
         switch (getBrightStatus())
         {
             case LIGHT_NORMAL:
-                startAutoBrightness(getContentResolver());
+                light = LIGHT_NORMAL - 1;
+                // startAutoBrightness(getContentResolver());
 //                light = LIGHT_50_PERCENT - 1;
                 break;
             case LIGHT_50_PERCENT:
@@ -695,12 +741,12 @@ public class FxService extends Service
 //                startAutoBrightness(getContentResolver());
                 break;
             case LIGHT_AUTO:
-                light = LIGHT_100_PERCENT - 1;
+                light = LIGHT_NORMAL - 1;
 //                light = LIGHT_NORMAL - 1;
-                stopAutoBrightness(getContentResolver());
+                // stopAutoBrightness(getContentResolver());
                 break;
             case LIGHT_ERR:
-                light = LIGHT_100_PERCENT - 1;
+                light = LIGHT_NORMAL - 1;
 //                light = LIGHT_NORMAL - 1;
                 break;
         }
@@ -708,6 +754,7 @@ public class FxService extends Service
         setLight(light);
         setScreenLightValue(getContentResolver(), light);
     }
+
 
 
     /*因为PowerManager提供的函数setBacklightBrightness接口是隐藏的，
