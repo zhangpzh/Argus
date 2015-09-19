@@ -91,7 +91,7 @@ public class MainActivity extends ActionBarActivity{
 
         if (policyManager.isAdminActive(componentName)) {	//判断是否有权限(激活了设备管理器)
         }else{
-            activeManager();//激活设备管理器获取权限
+            activeManager();//
         }
         //
         /* 初始化为-1, 表示没有空圆圈触发选择app事件 */
@@ -199,7 +199,9 @@ public class MainActivity extends ActionBarActivity{
         //preferences 文件不存在 创建一个空的 preferences 文件
         if(cnt == -1)
         {
-            editor.putInt("count",0);
+            editor.putInt("count",6);
+            for(int i = 1 ; i <= 6 ; i ++)
+                editor.putString("pkgName"+i,"NONE");
             editor.commit();
             for(int i = 0 ; i < 6 ; i ++)
                 records.add("NONE");

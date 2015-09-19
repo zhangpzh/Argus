@@ -50,7 +50,7 @@ public class ItService extends Service
     WindowManager mWindowManager;
 
     Button mFloatView,mFloatView2,mFloatView3;
-    Button mFloatView4,mFloatView5,mFloatView6,mFloatView7;
+    Button mFloatView4,mFloatView5,mFloatView6;
 
     private static final String TAG = "FxService";
     private Context mContext = null;
@@ -116,10 +116,6 @@ public class ItService extends Service
         mGridLayout = (PercentRelativeLayout)mFloatLayout.findViewById(R.id.gridLayout);
         mGridLayout.getBackground().setAlpha(100);
 
-        ViewGroup.LayoutParams lp = mGridLayout.getLayoutParams();
-        lp.width = StaticData.screenWidth / 5 * 3;
-        lp.height = lp.width ;
-        mGridLayout.setLayoutParams(lp);
 
         // appInfos =  MainActivity.getMainActivity().getRegisteredAppInfos();
 
@@ -204,6 +200,8 @@ public class ItService extends Service
                 if(appInfos.get(0).getAppIcon() != null) {
                     Intent intent = appInfos.get(0).getAppIntent();
                     startActivity(intent);
+                    StaticData.isShow2 = 0;
+                    MyService.getMyService().isShow2(false);
                 }
             }
         });
@@ -214,6 +212,8 @@ public class ItService extends Service
                 if(appInfos.get(1).getAppIcon() != null) {
                     Intent intent = appInfos.get(1).getAppIntent();
                     startActivity(intent);
+                    StaticData.isShow2 = 0;
+                    MyService.getMyService().isShow2(false);
                 }
             }
         });
@@ -224,6 +224,8 @@ public class ItService extends Service
                 if(appInfos.get(5).getAppIcon() != null) {
                     Intent intent = appInfos.get(5).getAppIntent();
                     startActivity(intent);
+                    StaticData.isShow2 = 0;
+                    MyService.getMyService().isShow2(false);
                 }
             }
         });
@@ -234,6 +236,8 @@ public class ItService extends Service
                 if(appInfos.get(2).getAppIcon() != null) {
                     Intent intent = appInfos.get(2).getAppIntent();
                     startActivity(intent);
+                    StaticData.isShow2 = 0;
+                    MyService.getMyService().isShow2(false);
                 }
             }
         });
@@ -244,6 +248,8 @@ public class ItService extends Service
                 if(appInfos.get(4).getAppIcon() != null) {
                     Intent intent = appInfos.get(4).getAppIntent();
                     startActivity(intent);
+                    StaticData.isShow2 = 0;
+                    MyService.getMyService().isShow2(false);
                 }
             }
         });
@@ -256,70 +262,43 @@ public class ItService extends Service
                 if(appInfos.get(3).getAppIcon() != null) {
                     Intent intent = appInfos.get(3).getAppIntent();
                     startActivity(intent);
+                    StaticData.isShow2 = 0;
+                    MyService.getMyService().isShow2(false);
                 }
             }
         });
 
-//        mFloatView7.setOnClickListener(new OnClickListener()
-//        {
-//
-//            @Override
-//            public void onClick(View v)
-//            {
-//
-//                    Intent intent = appInfos.get(6).getAppIntent();
-//                    startActivity(intent);
-//            }
-//        });
 
     }
 
-
     private ArrayList<String> readSettings() {
         SharedPreferences preferences;
-        SharedPreferences.Editor editor;
         ArrayList<String> records = new ArrayList<String>();
 
         preferences = getSharedPreferences(FAST_ACCESS_REGISTERED,MODE_PRIVATE);
-        editor = preferences.edit();
 
         int cnt = preferences.getInt("count", -1);
 
-        //preferences 文件不存在 创建一个空的 preferences 文件
+
+        //problem occur here !
+
+        //preferences 文件不存在 什么都不做, 初始化 records 中充满了空包名
         if(cnt == -1)
         {
-            editor.putInt("count",0);
-            editor.commit();
+            for(int i = 1 ; i <= 6 ; i ++)
+                records.add("NONE");
         }
         //preferences 文件存在 读取其中的 包名
         else
         {
             for(int i = 1 ; i <= cnt ; i ++)
             {
-                records.add(preferences.getString("pkgName"+i,"none"));
+                records.add(preferences.getString("pkgName"+i,"NONE"));
             }
-
-            /*
-
-            打 log
-            System.out.println("records 中显示的包名顺序: ");
-            for(Iterator it = records.iterator() ; it.hasNext();)
-            {
-                String tmpStr = new String((String)it.next());
-                System.out.println(tmpStr);
-            }
-
-            System.out.println();
-            System.out.println("preferences 文件中显示的包名顺序: ");
-            System.out.println("已注册的包名的个数为: "+cnt);
-            for(int i = 1 ; i <= cnt ; i ++)
-            {
-                System.out.println(preferences.getString("pkgName"+i,"none"));
-            }
-            */
         }
         return records;
     }
+
     void showRegisteredAppInGridView(ArrayList<String> registered_pkgName) {
 
         //初始化 registeredAppInfos
@@ -328,6 +307,17 @@ public class ItService extends Service
         else
             registeredAppInfos = new ArrayList<appInfo>();
 
+        if(registered_pkgName.size() == 0)
+        {
+            for(int j = 0 ; j < 30 ; j  ++)
+                System.out.println("Empty Array ----- ");
+        }
+
+        if(registered_pkgName.size() != 0 )
+        {
+            for(int j = 0 ; j < 30 ; j  ++)
+                System.out.println("Array size: " + registered_pkgName.size());
+        }
         for(int i = 0 ; i < registered_pkgName.size() ; i ++)
         {
             String tmpPkgName = registered_pkgName.get(i);
