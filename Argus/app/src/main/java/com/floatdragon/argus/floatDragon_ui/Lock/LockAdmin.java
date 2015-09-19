@@ -1,4 +1,4 @@
-package com.floatdragon.argus.floatDragon_ui;
+package com.floatdragon.argus.floatDragon_ui.Lock;
 
 import android.app.admin.DeviceAdminReceiver;
 

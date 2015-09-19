@@ -31,7 +31,7 @@
             android:layout_marginLeft="50dp"
             android:layout_alignTop="@+id/comet_icon"
             />
-        <Switch
+        <com.floatdragon.argus.switchbutton.SwitchButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

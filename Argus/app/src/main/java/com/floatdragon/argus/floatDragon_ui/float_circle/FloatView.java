@@ -1,10 +1,9 @@
-package com.floatdragon.argus.floatDragon_ui;
+package com.floatdragon.argus.floatDragon_ui.float_circle;
 /**
  * Created by zouyun on 15/8/10.
  */
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -15,7 +14,9 @@ import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.ImageView;
+
 import com.floatdragon.argus.R;
+import com.floatdragon.argus.floatDragon_ui.StaticData;
 
 /**
  * Created by zouyun on 15/8/5.
@@ -41,12 +42,13 @@ public class FloatView extends ImageView {
     private WindowManager.LayoutParams windowManagerParams = ((FloatApplication) getContext()
             .getApplicationContext()).getWindowParams();
 
-    public FloatView(Context context) {
+    public FloatView(final Context context) {
         super(context);
         scale = context.getResources().getDisplayMetrics().density;
         rawX = StaticData.pos.first;
         rawY = StaticData.pos.second + StaticData.circleSize / 2;
         bottom = (int)(48 * scale + 0.5f);
+
     }
 
     @Override
@@ -258,4 +260,5 @@ public class FloatView extends ImageView {
         }
         return index;
     }
+
 }

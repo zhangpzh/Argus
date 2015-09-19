@@ -1,43 +1,41 @@
-package com.floatdragon.argus.floatDragon_ui;
+package com.floatdragon.argus.floatDragon_ui.float_circle;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-
 import com.floatdragon.argus.R;
 
+
 /**
- * Created by zouyun on 15/9/3.
+ * Created by zouyun on 15/9/10.
  */
-public class SettingButton extends ImageButton {
+public class LockButton extends ImageButton {
 
-    public SettingButton(Context context) {
+    public LockButton(final Context context) {
         super(context);
-        setBackgroundResource(R.drawable.setting);
+        setBackgroundResource(R.drawable.lock);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnClickMethod.setting_onClick();
-                Log.i("setting", "call");
+                OnClickMethod.lock_onClick(context);
+                Log.i("move", "call");
             }
         });
     }
 
 
-    public SettingButton(Context context, AttributeSet attributeSet) {
+    public LockButton(final Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        setBackgroundResource(R.drawable.setting);
+        setBackgroundResource(R.drawable.lock);
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnClickMethod.setting_onClick();
-                Log.i("setting", "call");
+                OnClickMethod.lock_onClick(context);
+                Log.i("move", "call");
             }
         });
     }
-
 
 }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical">
+
+    <android.support.percent.PercentRelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:weightSum="1"
+        android:background="@drawable/black_background"
+        android:id="@+id/gridLayout"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            app:layout_widthPercent="15%"
+            app:layout_heightPercent="15%"
+            android:id="@+id/button"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            app:layout_marginPercent="5%"
+            android:visibility="invisible" />
+
+        <Button
+            app:layout_widthPercent="15%"
+            app:layout_heightPercent="15%"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            app:layout_marginLeftPercent="10%"
+            app:layout_marginTopPercent="20%"
+            android:id="@+id/button2"
+            android:visibility="invisible" />
+
+        <Button
+            app:layout_widthPercent="15%"
+            app:layout_heightPercent="15%"
+            android:id="@+id/button3"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            app:layout_marginRightPercent="10%"
+            app:layout_marginTopPercent="20%"
+            android:visibility="invisible" />
+
+        <Button
+            app:layout_widthPercent="15%"
+            app:layout_heightPercent="15%"
+            android:id="@+id/button4"
+            android:layout_gravity="right"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            app:layout_marginLeftPercent="10%"
+            app:layout_marginBottomPercent="20%"
+            android:visibility="invisible" />
+
+        <Button
+            app:layout_widthPercent="15%"
+            app:layout_heightPercent="15%"
+            android:id="@+id/button5"
+            android:layout_gravity="right"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            app:layout_marginRightPercent="10%"
+            app:layout_marginBottomPercent="20%"
+            android:visibility="invisible" />
+
+        <Button
+            app:layout_widthPercent="15%"
+            app:layout_heightPercent="15%"
+            android:id="@+id/button6"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            app:layout_marginPercent="5%"
+            android:visibility="invisible" />
+
+
+    </android.support.percent.PercentRelativeLayout>
+</LinearLayout>

@@ -14,17 +14,21 @@ import android.media.AudioManager;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.floatdragon.argus.R;
 import com.floatdragon.argus.app_information.*;
@@ -38,7 +42,9 @@ public class ItService extends Service
     int appInfoSize = 0;
     final String FAST_ACCESS_REGISTERED = "FAST_ACCESS_REGISTERED";      //存储快捷访问应用包名的设置文件
     //定义浮动窗口布局
-    GridLayout mFloatLayout;
+    LinearLayout mFloatLayout;
+   // GridLayout mGridLayout;
+    PercentRelativeLayout mGridLayout;
     WindowManager.LayoutParams wmParams;
     //创建浮动窗口设置布局参数的对象
     WindowManager mWindowManager;
@@ -95,24 +101,29 @@ public class ItService extends Service
         // 以屏幕左上角为原点，设置x、y初始值，相对于gravity
         wmParams.x = 0;
         wmParams.y = 0;
-
-        //设置悬浮窗口长宽数据
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-        //设置悬浮窗口长宽数据
-        wmParams.width = 600;
-        wmParams.height = 600;
+        wmParams.horizontalWeight = 0;
+        wmParams.verticalWeight = 0;
+        //设置为全屏
+        wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
 
         LayoutInflater inflater = LayoutInflater.from(getApplication());
         //获取浮动窗口视图所在布局
-        mFloatLayout = (GridLayout) inflater.inflate(R.layout.float_layout, null);
-        mFloatLayout.getBackground().setAlpha(100);
+        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.float_layout_big, null);
 
 
-       // appInfos =  MainActivity.getMainActivity().getRegisteredAppInfos();
+//        mGridLayout = (GridLayout) mFloatLayout.findViewById(R.id.gridLayout);
+        mGridLayout = (PercentRelativeLayout)mFloatLayout.findViewById(R.id.gridLayout);
+        mGridLayout.getBackground().setAlpha(100);
 
-        showRegisteredAppInGridView( readSettings() );
+        ViewGroup.LayoutParams lp = mGridLayout.getLayoutParams();
+        lp.width = StaticData.screenWidth / 5 * 3;
+        lp.height = lp.width ;
+        mGridLayout.setLayoutParams(lp);
+
+        // appInfos =  MainActivity.getMainActivity().getRegisteredAppInfos();
+
+        showRegisteredAppInGridView(readSettings());
         appInfos = registeredAppInfos;
 
 
@@ -123,138 +134,117 @@ public class ItService extends Service
 
 
 
-        mFloatView = (Button) mFloatLayout.findViewById(R.id.float_id);
-        mFloatView2 = (Button) mFloatLayout.findViewById(R.id.float_id2);
-        mFloatView3 = (Button) mFloatLayout.findViewById(R.id.float_id3);
-        mFloatView4 = (Button) mFloatLayout.findViewById(R.id.float_id4);
-        mFloatView5 = (Button) mFloatLayout.findViewById(R.id.float_id5);
-        mFloatView6 = (Button) mFloatLayout.findViewById(R.id.float_id6);
-        mFloatView7 = (Button) mFloatLayout.findViewById(R.id.float_id7);
-      //  Toast.makeText(ItService.this, "appInfos.size()" + appInfos.size(), Toast.LENGTH_SHORT).show();
+        mFloatView = (Button) mFloatLayout.findViewById(R.id.button);
+        mFloatView2 = (Button) mFloatLayout.findViewById(R.id.button2);
+        mFloatView3 = (Button) mFloatLayout.findViewById(R.id.button3);
+        mFloatView4 = (Button) mFloatLayout.findViewById(R.id.button4);
+        mFloatView5 = (Button) mFloatLayout.findViewById(R.id.button5);
+        mFloatView6 = (Button) mFloatLayout.findViewById(R.id.button6);
+        //  Toast.makeText(ItService.this, "appInfos.size()" + appInfos.size(), Toast.LENGTH_SHORT).show();
         //浮动窗口按钮
         appInfoSize = appInfos.size();
+//        Toast.makeText(ItService.this, "Size" + appInfoSize, Toast.LENGTH_SHORT).show();
 
-        switch (appInfoSize) {
-            case 6:
-                mFloatView.setVisibility(View.VISIBLE);
-                mFloatView.setBackground(appInfos.get(0).getAppIcon());
-            case 5:
-                mFloatView2.setVisibility(View.VISIBLE);
-                mFloatView2.setBackground(appInfos.get(1).getAppIcon());
-            case 4:
-                mFloatView4.setVisibility(View.VISIBLE);
-                mFloatView4.setBackground(appInfos.get(2).getAppIcon());
-            case 3:
-                mFloatView6.setVisibility(View.VISIBLE);
-                mFloatView6.setBackground(appInfos.get(3).getAppIcon());
-            case 2:
-                mFloatView5.setVisibility(View.VISIBLE);
-                mFloatView5.setBackground(appInfos.get(4).getAppIcon());
-            case 1:
-                mFloatView3.setVisibility(View.VISIBLE);
-                mFloatView3.setBackground(appInfos.get(5).getAppIcon());
-        }
+//        size 总是为6的
 
-        mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
-                View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
-                .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        Log.i(TAG, "Width/2--->" + mFloatView.getMeasuredWidth() / 2);
-        Log.i(TAG, "Height/2--->" + mFloatView.getMeasuredHeight() / 2);
+//        switch (appInfoSize) {
+//            case 6:
+//                mFloatView.setVisibility(View.VISIBLE);
+//                mFloatView.setBackground(appInfos.get(0).getAppIcon());
+//            case 5:
+//                mFloatView2.setVisibility(View.VISIBLE);
+//                mFloatView2.setBackground(appInfos.get(1).getAppIcon());
+//            case 4:
+//                mFloatView4.setVisibility(View.VISIBLE);
+//                mFloatView4.setBackground(appInfos.get(2).getAppIcon());
+//            case 3:
+//                mFloatView6.setVisibility(View.VISIBLE);
+//                mFloatView6.setBackground(appInfos.get(3).getAppIcon());
+//            case 2:
+//                mFloatView5.setVisibility(View.VISIBLE);
+//                mFloatView5.setBackground(appInfos.get(4).getAppIcon());
+//            case 1:
+//                mFloatView3.setVisibility(View.VISIBLE);
+//                mFloatView3.setBackground(appInfos.get(5).getAppIcon());
+//        }
+        mFloatView.setVisibility(View.VISIBLE);
+        mFloatView.setBackground(appInfos.get(0).getAppIcon());
+        mFloatView2.setVisibility(View.VISIBLE);
+        mFloatView2.setBackground(appInfos.get(1).getAppIcon());
+        mFloatView4.setVisibility(View.VISIBLE);
+        mFloatView4.setBackground(appInfos.get(2).getAppIcon());
+        mFloatView6.setVisibility(View.VISIBLE);
+        mFloatView6.setBackground(appInfos.get(3).getAppIcon());
+        mFloatView5.setVisibility(View.VISIBLE);
+        mFloatView5.setBackground(appInfos.get(4).getAppIcon());
+        mFloatView3.setVisibility(View.VISIBLE);
+        mFloatView3.setBackground(appInfos.get(5).getAppIcon());
 
-        mFloatLayout.setOnTouchListener(new OnTouchListener() {
+        mFloatLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 StaticData.isShow2 = 0;
                 MyService.getMyService().isShow2(false);
-                return false;
+                return true;
             }
         });
+        mGridLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
+
 
         mFloatView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                //Toast.makeText(ItService.this, "001", Toast.LENGTH_SHORT).show();
-//                if(appInfoSize == 0) {
-//                    Intent intent = new Intent(ItService.this,SelectAppsActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                }
-//                else{
-                    Intent intent = appInfos.get(0).getAppIntent();
-                    if(intent == null)
-                        return;
-                    startActivity(intent);
-//                }
 
+                if(appInfos.get(0).getAppIcon() != null) {
+                    Intent intent = appInfos.get(0).getAppIntent();
+                    startActivity(intent);
+                }
             }
         });
         mFloatView2.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-//                if(appInfoSize == 1) {
-//                    Intent intent = new Intent(ItService.this,SelectAppsActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                }
-//                else{
+                if(appInfos.get(1).getAppIcon() != null) {
                     Intent intent = appInfos.get(1).getAppIntent();
-                    if(intent == null)
-                        return;
                     startActivity(intent);
-//                }
+                }
             }
         });
         mFloatView3.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-//                if(appInfoSize == 2 ) {
-//                    Intent intent = new Intent(ItService.this,SelectAppsActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                }
-//                else{
+                if(appInfos.get(5).getAppIcon() != null) {
                     Intent intent = appInfos.get(5).getAppIntent();
-                    if(intent == null)
-                        return;
                     startActivity(intent);
-//                }
+                }
             }
         });
         mFloatView4.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-//                if(appInfoSize == 3) {
-//                    Intent intent = new Intent(ItService.this,SelectAppsActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                }
-//                else{
+                if(appInfos.get(2).getAppIcon() != null) {
                     Intent intent = appInfos.get(2).getAppIntent();
-                    if(intent == null)
-                        return;
                     startActivity(intent);
-//                }
+                }
             }
         });
         mFloatView5.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-//                if(appInfoSize == 4) {
-//                    Intent intent = new Intent(ItService.this,SelectAppsActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                }
-//                else{
+                if(appInfos.get(4).getAppIcon() != null) {
                     Intent intent = appInfos.get(4).getAppIntent();
-                    if(intent == null)
-                        return;
                     startActivity(intent);
-//                }
+                }
             }
         });
         mFloatView6.setOnClickListener(new OnClickListener()
@@ -263,39 +253,24 @@ public class ItService extends Service
             @Override
             public void onClick(View v)
             {
-//                if(appInfoSize == 5) {
-//                    Intent intent = new Intent(ItService.this,SelectAppsActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                }
-//                else{
+                if(appInfos.get(3).getAppIcon() != null) {
                     Intent intent = appInfos.get(3).getAppIntent();
-                    if(intent == null)
-                        return;
                     startActivity(intent);
-//                }
+                }
             }
         });
 
-        mFloatView7.setOnClickListener(new OnClickListener()
-        {
-
-            @Override
-            public void onClick(View v)
-            {
-//                if(appInfoSize == 6) {
-//                    Intent intent = new Intent(ItService.this,SelectAppsActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        mFloatView7.setOnClickListener(new OnClickListener()
+//        {
+//
+//            @Override
+//            public void onClick(View v)
+//            {
+//
+//                    Intent intent = appInfos.get(6).getAppIntent();
 //                    startActivity(intent);
-//                }
-//                else{
-                    Intent intent = appInfos.get(6).getAppIntent();
-                    if(intent == null)
-                        return;
-                    startActivity(intent);
-//                }
-            }
-        });
+//            }
+//        });
 
     }
 
@@ -376,6 +351,9 @@ public class ItService extends Service
 //        p_gridView.setAdapter(newMyAdapter);
     }
 
+
+
+
     @Override
     public void onDestroy()
     {
@@ -387,4 +365,5 @@ public class ItService extends Service
             mWindowManager.removeView(mFloatLayout);
         }
     }
+
 }

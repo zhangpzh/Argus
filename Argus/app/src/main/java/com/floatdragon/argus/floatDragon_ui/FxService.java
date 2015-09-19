@@ -7,23 +7,34 @@ package com.floatdragon.argus.floatDragon_ui;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.provider.Settings;
+import android.support.percent.PercentRelativeLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -37,9 +48,11 @@ import java.lang.reflect.Method;
 
 public class FxService extends Service
 {
+
     int ClickT = 0;
     //定义浮动窗口布局
-    GridLayout mFloatLayout;
+    LinearLayout mFloatLayout;
+    PercentRelativeLayout mGridLayout;
     WindowManager.LayoutParams wmParams;
     //创建浮动窗口设置布局参数的对象
     WindowManager mWindowManager;
@@ -58,6 +71,18 @@ public class FxService extends Service
     public static FxService  getFxService() {
         return fxService;
     }
+
+    //bright
+    private Button mBrightness,mBrightness2;
+    private static final int LIGHT_NORMAL = 64;
+    private static final int LIGHT_50_PERCENT = 127;
+    private static final int LIGHT_75_PERCENT = 191;
+    private static final int LIGHT_100_PERCENT = 255;
+    private static final int LIGHT_AUTO = 0;
+    private static final int LIGHT_ERR = -1;
+
+    private BrightObserver mBrightObserver;
+    private PowerManager mPowerManager;
 
 
     @Override
@@ -78,9 +103,7 @@ public class FxService extends Service
 
     private void createFloatView()
     {
-//        Drawable sound_on = getResources().getDrawable(R.drawable.sound_on);
-//        Drawable sound_off = getResources().getDrawable(R.drawable.sound_off);
-//        Drawable vibration = getResources().getDrawable(R.drawable.vibration);
+
         wmParams = new WindowManager.LayoutParams();
         //获取的是WindowManagerImpl.CompatModeWrapper
         mWindowManager = (WindowManager)getApplication().getSystemService(getApplication().WINDOW_SERVICE);
@@ -96,26 +119,34 @@ public class FxService extends Service
         // 以屏幕左上角为原点，设置x、y初始值，相对于gravity
         wmParams.x = 0;
         wmParams.y = 0;
+        wmParams.horizontalWeight = 0;
+        wmParams.verticalWeight = 0;
+        //设置悬浮窗口长宽数据
+        //设置为全屏
+        wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
 
         //设置悬浮窗口长宽数据
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-		//设置悬浮窗口长宽数据
-        wmParams.width = 600;
-        wmParams.height = 600;
+        // wmParams.width = 600;
+        // wmParams.height = 600;
 
         LayoutInflater inflater = LayoutInflater.from(getApplication());
         //获取浮动窗口视图所在布局
-        mFloatLayout = (GridLayout) inflater.inflate(R.layout.float_layout, null);
+        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.float_layout_big, null);
+        mGridLayout = (PercentRelativeLayout) mFloatLayout.findViewById(R.id.gridLayout);
+        mGridLayout.getBackground().setAlpha(100);
 
-
+        ViewGroup.LayoutParams lp = mGridLayout.getLayoutParams();
+        lp.width = StaticData.screenWidth / 5 * 3;
+        lp.height = lp.width ;
+        mGridLayout.setLayoutParams(lp);
         //添加mFloatLayout
         mWindowManager.addView(mFloatLayout, wmParams);
         //浮动窗口按钮
 
-        mFloatView = (Button)mFloatLayout.findViewById(R.id.float_id);
+        mFloatView = (Button)mFloatLayout.findViewById(R.id.button);
         mFloatView.setVisibility(View.VISIBLE);
+
         AudioManager audio =(AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if(getR_Mode(audio) == 2){
             mFloatView.setBackground(getResources().getDrawable(R.drawable.sound_on));
@@ -126,11 +157,11 @@ public class FxService extends Service
         if(getR_Mode(audio) == 0){
             mFloatView.setBackground(getResources().getDrawable(R.drawable.sound_off));
         }
-        mFloatView2 = (Button)mFloatLayout.findViewById(R.id.float_id2);
-        mFloatView2.setVisibility(View.VISIBLE);
-        mFloatView3 = (Button)mFloatLayout.findViewById(R.id.float_id3);
-        mFloatView3.setVisibility(View.VISIBLE);
-        mFloatView4 = (Button)mFloatLayout.findViewById(R.id.float_id4);
+        mFloatView2 = (Button)mFloatLayout.findViewById(R.id.button2);
+        // mFloatView2.setVisibility(View.VISIBLE);
+        mFloatView3 = (Button)mFloatLayout.findViewById(R.id.button3);
+        // mFloatView3.setVisibility(View.VISIBLE);
+        mFloatView4 = (Button)mFloatLayout.findViewById(R.id.button4);
         mFloatView4.setVisibility(View.VISIBLE);
         if(getMobileDataStatus("getMobileDataEnabled") == true){
             mFloatView4.setBackground(getResources().getDrawable(R.drawable.apn_on));
@@ -139,19 +170,19 @@ public class FxService extends Service
             mFloatView4.setBackground(getResources().getDrawable(R.drawable.apn_off));
         }
 
-        mFloatView5 = (Button)mFloatLayout.findViewById(R.id.float_id5);
+        mFloatView5 = (Button)mFloatLayout.findViewById(R.id.button5);
         mFloatView5.setVisibility(View.VISIBLE);
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
             Toast.makeText(FxService.this,"找不到蓝牙设备",Toast.LENGTH_SHORT).show();
         }
         else if(mBluetoothAdapter.isEnabled() == false) {
-           mFloatView5.setBackground(getResources().getDrawable(R.drawable.bluetooth_off));
+            mFloatView5.setBackground(getResources().getDrawable(R.drawable.bluetooth_off));
         }
         else {
             mFloatView5.setBackground(getResources().getDrawable(R.drawable.bluetooth_on));
         }
-        mFloatView6 = (Button)mFloatLayout.findViewById(R.id.float_id6);
+        mFloatView6 = (Button)mFloatLayout.findViewById(R.id.button6);
         mFloatView6.setVisibility(View.VISIBLE);
         wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
         if (wifiManager.isWifiEnabled()) {
@@ -160,25 +191,52 @@ public class FxService extends Service
             mFloatView6.setBackground(getResources().getDrawable(R.drawable.wifi_disabled));
         }
 
+        mPowerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);
+        mBrightObserver = new BrightObserver(new Handler());
+        mBrightness = (Button)mFloatLayout.findViewById(R.id.button3);
+        mBrightness2 = (Button)mFloatLayout.findViewById(R.id.button2);
+        mBrightness.setVisibility(View.VISIBLE);
+        mBrightness2.setVisibility(View.VISIBLE);
+        mBrightness.setBackground(getResources().getDrawable(R.drawable.brightness_most));
+        mBrightness2.setBackground(getResources().getDrawable(R.drawable.brightness_low));
+        refreshButton();
+        mBrightness.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        mFloatView7 = (Button)mFloatLayout.findViewById(R.id.float_id7);
-        mFloatView7.setVisibility(View.VISIBLE);
-        mFloatView7.setBackground(getResources().getDrawable(R.drawable.power));
-        mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
-                View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
-                .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        Log.i(TAG, "Width/2--->" + mFloatView.getMeasuredWidth() / 2);
-        Log.i(TAG, "Height/2--->" + mFloatView.getMeasuredHeight() / 2);
+                setBrightStatus();
+            }
+        });
+        mBrightness.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view){
+                setBrightStatus();
+                return true;
+            }
+        });
+        mBrightness2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-//        mFloatLayout.setOnTouchListener(new OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                StaticData.isShow = 0;
-//                MyService.getMyService().isShow(false);
-//                return false;
-//            }
-//        });
+                setBrightStatus2();
+            }
+        });
 
+
+        mFloatLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                StaticData.isShow = 0;
+                MyService.getMyService().isShow(false);
+                return true;
+            }
+        });
+        mGridLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
 
 
         mFloatView.setOnClickListener(new OnClickListener() {
@@ -210,55 +268,55 @@ public class FxService extends Service
 
             }
         });
-        mFloatView2.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                // TODO Auto-generated method stub
-                Toast.makeText(FxService.this, "进入微信", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent();
-
-                ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
-                intent.setAction(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_LAUNCHER);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setComponent(cmp);
-                startActivity(intent);
-            }
-        });
-        mFloatView3.setOnClickListener(new OnClickListener()
-        {
-
-            @Override
-            public void onClick(View v)
-            {
-                // TODO Auto-generated method stub
-                Toast.makeText(FxService.this, "HOME", Toast.LENGTH_SHORT).show();
-                Intent mHomeIntent = new Intent(Intent.ACTION_MAIN);
-
-                mHomeIntent.addCategory(Intent.CATEGORY_HOME);
-                mHomeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-                startActivity(mHomeIntent);
-
-            }
-        });
+//        mFloatView2.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//
+//                // TODO Auto-generated method stub
+//                Toast.makeText(FxService.this, "进入微信", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent();
+//
+//                ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
+//                intent.setAction(Intent.ACTION_MAIN);
+//                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.setComponent(cmp);
+//                startActivity(intent);
+//            }
+//        });
+//        mFloatView3.setOnClickListener(new OnClickListener()
+//        {
+//
+//            @Override
+//            public void onClick(View v)
+//            {
+//                // TODO Auto-generated method stub
+//                Toast.makeText(FxService.this, "HOME", Toast.LENGTH_SHORT).show();
+//                Intent mHomeIntent = new Intent(Intent.ACTION_MAIN);
+//
+//                mHomeIntent.addCategory(Intent.CATEGORY_HOME);
+//                mHomeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+//                startActivity(mHomeIntent);
+//
+//            }
+//        });
         mFloatView4.setOnClickListener(new OnClickListener()
         {
 
             @Override
             public void onClick(View v)
             {
-              if(getMobileDataStatus("getMobileDataEnabled") == true){
-                  setMobileDataStatus(mContext,false);
-                  Toast.makeText(FxService.this,"移动数据已关闭",Toast.LENGTH_SHORT).show();
-                  mFloatView4.setBackground(getResources().getDrawable(R.drawable.apn_off));
-              }
-               else{
-                  setMobileDataStatus(mContext,true);
-                  Toast.makeText(FxService.this,"移动数据已开启",Toast.LENGTH_SHORT).show();
-                  mFloatView4.setBackground(getResources().getDrawable(R.drawable.apn_on));
-              }
+                if(getMobileDataStatus("getMobileDataEnabled") == true){
+                    setMobileDataStatus(mContext,false);
+                    Toast.makeText(FxService.this,"移动数据已关闭",Toast.LENGTH_SHORT).show();
+                    mFloatView4.setBackground(getResources().getDrawable(R.drawable.apn_off));
+                }
+                else{
+                    setMobileDataStatus(mContext,true);
+                    Toast.makeText(FxService.this,"移动数据已开启",Toast.LENGTH_SHORT).show();
+                    mFloatView4.setBackground(getResources().getDrawable(R.drawable.apn_on));
+                }
 
             }
         });
@@ -310,20 +368,22 @@ public class FxService extends Service
             }
         });
 
-        mFloatView7.setOnClickListener(new OnClickListener()
-        {
-
-            @Override
-            public void onClick(View v)
-            {
-                // TODO Auto-generated method stub
-                Toast.makeText(FxService.this, "退出", Toast.LENGTH_SHORT).show();
-                StaticData.isShow = 0;
-                MyService.getMyService().isShow(false);
-            }
-        });
+//        mFloatView7.setOnClickListener(new OnClickListener()
+//        {
+//
+//            @Override
+//            public void onClick(View v)
+//            {
+//                // TODO Auto-generated method stub
+//                Toast.makeText(FxService.this, "退出", Toast.LENGTH_SHORT).show();
+//                StaticData.isShow = 0;
+//                MyService.getMyService().isShow(false);
+//            }
+//        });
 
     }
+
+
 
 
     public int getR_Mode(AudioManager audio){
@@ -450,6 +510,328 @@ public class FxService extends Service
 
     }
 
+//    package com.example.bs;
+//
+//    import java.lang.reflect.Field;
+//    import java.lang.reflect.InvocationTargetException;
+//    import java.lang.reflect.Method;
+//    import android.app.Activity;
+//    import android.content.ContentResolver;
+//    import android.content.Context;
+//    import android.database.ContentObserver;
+//    import android.os.Bundle;
+//    import android.os.Handler;
+//    import android.os.PowerManager;
+//    import android.provider.Settings;
+//    import android.provider.Settings.SettingNotFoundException;
+//    import android.view.View;
+//    import android.view.View.OnClickListener;
+//    import android.widget.Button;
+//    import android.widget.Toast;
+
+//    public class BrightnessSwitch extends Activity implements OnClickListener
+//    {
+
+
+    /** Called when the activity is first created. */
+//        @Override
+//        public void onCreate(Bundle savedInstanceState)
+//        {
+//            super.onCreate(savedInstanceState);
+//            setContentView(R.layout.main);
+//            mPowerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);
+//
+//            mBrightObserver = new BrightObserver(new Handler());
+//
+//            mBrightness = (Button)findViewById(R.id.bright);
+//            refreshButton();
+//            mBrightness.setOnClickListener(this);
+//        }
+
+
+//        @Override
+//        protected void onDestroy()
+//        {
+//            // TODO Auto-generated method stub
+//            super.onDestroy();
+//            mBrightObserver.stopObserver();
+//        }
+//
+//
+//        @Override
+//        protected void onResume()
+//        {
+//            // TODO Auto-generated method stub
+//            super.onResume();
+//            mBrightObserver.startObserver();
+//        }
+
+    //更新按钮
+    private void refreshButton()
+    {
+        switch (getBrightStatus())
+        {
+            case LIGHT_NORMAL:
+                mBrightness.setText("light_50percent");
+                break;
+            case LIGHT_50_PERCENT:
+                mBrightness.setText("light_75percent");
+                break;
+            case LIGHT_75_PERCENT:
+                mBrightness.setText("light_100percent");
+                break;
+            case LIGHT_100_PERCENT:
+                mBrightness.setText("string.light_auto");
+                break;
+            case LIGHT_AUTO:
+                mBrightness.setText("string.light_normal");
+                break;
+            case LIGHT_ERR:
+                mBrightness.setText("light_err");
+                break;
+        }
+    }
+
+    //得到当前亮度值状态
+    private int getBrightStatus()
+    {
+
+        // TODO Auto-generated method stub
+        int light = 0;
+        boolean auto = false;
+        ContentResolver cr = getContentResolver();
+
+        try
+        {
+            auto = Settings.System.getInt(cr,
+                    Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+            if (!auto)
+            {
+                light = android.provider.Settings.System.getInt(cr,
+                        Settings.System.SCREEN_BRIGHTNESS, -1);
+                if (light > 0 && light <= LIGHT_NORMAL)
+                {
+                    return LIGHT_NORMAL;
+                }
+                else if (light > LIGHT_NORMAL && light <= LIGHT_50_PERCENT)
+                {
+                    return LIGHT_50_PERCENT;
+                }
+                else if (light > LIGHT_50_PERCENT && light <= LIGHT_75_PERCENT)
+                {
+                    return LIGHT_75_PERCENT;
+                }
+                else if (light > LIGHT_75_PERCENT && light <= LIGHT_100_PERCENT)
+                {
+                    return LIGHT_100_PERCENT;
+                }
+            }
+            else
+            {
+                return LIGHT_AUTO;
+            }
+        }
+        catch (Settings.SettingNotFoundException e1)
+        {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        return LIGHT_ERR;
+
+    }
+
+
+    private void setBrightStatus()
+    {
+        int light = 0;
+
+        switch (getBrightStatus())
+        {
+            case LIGHT_NORMAL:
+                light = LIGHT_50_PERCENT - 1;
+                break;
+            case LIGHT_50_PERCENT:
+                light = LIGHT_75_PERCENT - 1;
+                break;
+            case LIGHT_75_PERCENT:
+                light = LIGHT_100_PERCENT - 1;
+                break;
+            case LIGHT_100_PERCENT:
+                startAutoBrightness(getContentResolver());
+                break;
+            case LIGHT_AUTO:
+                light = LIGHT_NORMAL - 1;
+                stopAutoBrightness(getContentResolver());
+                break;
+            case LIGHT_ERR:
+                light = LIGHT_NORMAL - 1;
+                break;
+
+        }
+
+        setLight(light);
+        setScreenLightValue(getContentResolver(), light);
+    }
+    private void setBrightStatus2()
+    {
+        int light = 0;
+
+        switch (getBrightStatus())
+        {
+            case LIGHT_NORMAL:
+                startAutoBrightness(getContentResolver());
+//                light = LIGHT_50_PERCENT - 1;
+                break;
+            case LIGHT_50_PERCENT:
+                light = LIGHT_NORMAL - 1;
+//                light = LIGHT_75_PERCENT - 1;
+                break;
+            case LIGHT_75_PERCENT:
+                light = LIGHT_50_PERCENT - 1;
+//                light = LIGHT_100_PERCENT - 1;
+                break;
+            case LIGHT_100_PERCENT:
+                light = LIGHT_75_PERCENT - 1;
+//                startAutoBrightness(getContentResolver());
+                break;
+            case LIGHT_AUTO:
+                light = LIGHT_100_PERCENT - 1;
+//                light = LIGHT_NORMAL - 1;
+                stopAutoBrightness(getContentResolver());
+                break;
+            case LIGHT_ERR:
+                light = LIGHT_100_PERCENT - 1;
+//                light = LIGHT_NORMAL - 1;
+                break;
+        }
+
+        setLight(light);
+        setScreenLightValue(getContentResolver(), light);
+    }
+
+
+    /*因为PowerManager提供的函数setBacklightBrightness接口是隐藏的，
+         * 所以在基于第三方开发调用该函数时，只能通过反射实现在运行时调用
+         */
+    private void setLight(int light)
+    {
+        try
+        {
+            //得到PowerManager类对应的Class对象
+            Class<?> pmClass = Class.forName(mPowerManager.getClass().getName());
+            //得到PowerManager类中的成员mService（mService为PowerManagerService类型）
+            Field field = pmClass.getDeclaredField("mService");
+            field.setAccessible(true);
+            //实例化mService
+            Object iPM = field.get(mPowerManager);
+            //得到PowerManagerService对应的Class对象
+            Class<?> iPMClass = Class.forName(iPM.getClass().getName());
+            /*得到PowerManagerService的函数setBacklightBrightness对应的Method对象，
+             * PowerManager的函数setBacklightBrightness实现在PowerManagerService中
+             */
+            Method method = iPMClass.getDeclaredMethod("setBacklightBrightness", int.class);
+            method.setAccessible(true);
+            //调用实现PowerManagerService的setBacklightBrightness
+            method.invoke(iPM, light);
+        }
+        catch (ClassNotFoundException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (NoSuchFieldException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IllegalArgumentException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (NoSuchMethodException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (InvocationTargetException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+//        @Override
+//        public void onClick(View v)
+//        {
+//            // TODO Auto-generated method stub
+//            setBrightStatus();
+//        }
+
+    //启动自动调节亮度
+    public void startAutoBrightness(ContentResolver cr)
+    {
+        Settings.System.putInt(cr, Settings.System.SCREEN_BRIGHTNESS_MODE,
+                Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
+    }
+
+    //关闭自动调节亮度
+    public void stopAutoBrightness(ContentResolver cr)
+    {
+        Settings.System.putInt(cr, Settings.System.SCREEN_BRIGHTNESS_MODE,
+                Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+    }
+
+    //设置改变亮度值
+    public void setScreenLightValue(ContentResolver resolver, int value)
+    {
+        android.provider.Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS,
+                value);
+    }
+
+    private class BrightObserver extends ContentObserver
+    {
+        ContentResolver mResolver;
+
+        public BrightObserver(Handler handler)
+        {
+            super(handler);
+            mResolver = getContentResolver();
+        }
+
+        @Override
+        public void onChange(boolean selfChange)
+        {
+            // TODO Auto-generated method stub
+            super.onChange(selfChange);
+            refreshButton();
+            Toast.makeText(FxService.this, "亮度设置有改变", Toast.LENGTH_SHORT).show();
+        }
+
+        //注册观察
+        public void startObserver()
+        {
+            mResolver.registerContentObserver(Settings.System
+                            .getUriFor(Settings.System.SCREEN_BRIGHTNESS), false,
+                    this);
+            mResolver.registerContentObserver(Settings.System
+                            .getUriFor(Settings.System.SCREEN_BRIGHTNESS_MODE), false,
+                    this);
+        }
+
+        //解除观察
+        public void stopObserver()
+        {
+            mResolver.unregisterContentObserver(this);
+        }
+    }
+//    }
 
     @Override
     public void onDestroy()
