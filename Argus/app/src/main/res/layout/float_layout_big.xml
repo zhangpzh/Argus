@@ -75,6 +75,11 @@
             android:layout_centerHorizontal="true"
             app:layout_marginPercent="5%"
             android:visibility="invisible" />
+        <SurfaceView
+            android:id="@+id/surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
 
 
     </android.support.percent.PercentRelativeLayout>

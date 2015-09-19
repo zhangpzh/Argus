@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Camera;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
@@ -55,7 +56,6 @@ public class ItService extends Service
     private static final String TAG = "FxService";
     private Context mContext = null;
     private WifiManager wifiManager;
-
     private static ItService itService=null;
     public ItService(){
         itService=this;
@@ -74,6 +74,7 @@ public class ItService extends Service
         super.onCreate();
         Log.i(TAG, "oncreat");
         createFloatView();
+
     }
 
     @Override

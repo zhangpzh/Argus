@@ -196,7 +196,7 @@ public class FloatView extends ImageView {
             case 2:
                 if (y - mTouchy < StaticData.barRadius)
                     windowManagerParams.y = StaticData.barRadius - StaticData.circleSize / 2 ;
-                if (y - mTouchy > StaticData.screenHeight - StaticData.barRadius - bottom - StaticData.circleSize / 2)
+                if (y - mTouchy > StaticData.screenHeight - StaticData.barRadius - bottom - StaticData.circleSize / 2 - top)
                     windowManagerParams.y = StaticData.screenHeight - StaticData.barRadius -  StaticData.circleSize;
                 windowManagerParams.x = 0;
                 rawX = 0;
@@ -208,7 +208,7 @@ public class FloatView extends ImageView {
             case 3:
                 if (y - mTouchy < StaticData.barRadius)
                     windowManagerParams.y = StaticData.barRadius - StaticData.circleSize / 2 ;
-                if (y - mTouchy > StaticData.screenHeight - StaticData.barRadius - bottom - StaticData.circleSize / 2)
+                if (y - mTouchy > StaticData.screenHeight - StaticData.barRadius - bottom - StaticData.circleSize / 2 - top)
                     windowManagerParams.y = StaticData.screenHeight - StaticData.barRadius -  StaticData.circleSize;
                 windowManagerParams.x = StaticData.screenWidth;
                 rawX = StaticData.screenWidth;
