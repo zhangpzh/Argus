@@ -24,10 +24,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/notepad">
-            <RelativeLayout
-                android:id="@+id/notepad_delete_title_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/notepad_delete_title_layout">
+            <ImageView
+                android:id="@+id/Notepad_Delete_Back"
+                android:layout_width="45dp"
+                android:layout_height="28dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/back_arrow"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:paddingTop="0dp"
+                android:paddingLeft="5dp" />
             <TextView
                 android:id="@+id/notepad_show_title"
                 android:layout_width="fill_parent"
@@ -38,19 +48,20 @@
                 android:textStyle="italic"
                 android:textColor="#D15FEE"
                 android:layout_toLeftOf="@+id/Notepad_Delete_Delete"
-                android:layout_toStartOf="@+id/Notepad_Delete_Delete"/>
+                android:layout_toStartOf="@+id/Notepad_Delete_Delete"
+                android:layout_toRightOf="@+id/Notepad_Delete_Back"
+                android:layout_toEndOf="@+id/Notepad_Delete_Back"/>
             <ImageView
                 android:id="@+id/Notepad_Delete_Delete"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_weight="1"
+                android:layout_width="45dp"
+                android:layout_height="28dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/bin"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="3dp"
-                android:layout_marginRight="20dp" />
-            </RelativeLayout>
+                android:paddingTop="3dp"
+                android:paddingRight="5dp" />
+        </RelativeLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4px"

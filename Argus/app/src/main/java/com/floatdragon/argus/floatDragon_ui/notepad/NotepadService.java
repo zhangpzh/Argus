@@ -53,6 +53,7 @@ public class NotepadService extends Service implements RemoveListener {
     RelativeLayout Notepad_Show_Layout;
     TextView Empty_List_Textview;
     RelativeLayout Notepad_Show_Title_Layout;
+    ImageView Notepad_Delete_Back;
 
     RelativeLayout Notepad_Delete;
     RelativeLayout Notepad_Delete_Show_Layout;
@@ -63,6 +64,7 @@ public class NotepadService extends Service implements RemoveListener {
     RelativeLayout Notepad_Delete_SelectAll;
     CheckBox Notepad_Delete_All_Checkbox;
     RelativeLayout Notepad_Delete_Title_Layout;
+    private ImageView PopupWindow_Back;
 
     private List<Map<String, Object>> listitems;
     private SlideCutListView NotepadListView;
@@ -77,6 +79,7 @@ public class NotepadService extends Service implements RemoveListener {
     private PopupWindow popupWindow;
     private PopupWindow popupWindow2;
     private PopupWindow popupWindow3;
+
 
     private DatabaseHandler m_dbhandler;
 
@@ -176,6 +179,7 @@ public class NotepadService extends Service implements RemoveListener {
         Notepad_Delete_SelectAll = (RelativeLayout)Notepad_Delete.findViewById(R.id.notepad_delete_all);
         Notepad_Delete_All_Checkbox = (CheckBox)Notepad_Delete.findViewById(R.id.checkbox_all);
         Notepad_Delete_Title_Layout = (RelativeLayout)Notepad_Delete.findViewById(R.id.notepad_delete_title_layout);
+        Notepad_Delete_Back = (ImageView)Notepad_Delete.findViewById(R.id.Notepad_Delete_Back);
 /****************************/
 
 /****************************/
@@ -303,6 +307,29 @@ public class NotepadService extends Service implements RemoveListener {
             public void onClick(View view) {
             }
         });
+        Notepad_Delete_Back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter = new SimpleAdapter(getApplicationContext(), listitems, R.layout.array_items,
+                        new String[]{"date", "string"}, new int[]{R.id.dates, R.id.strings});
+                NotepadListView.setAdapter(adapter);
+                Notepad_Main.setVisibility(View.VISIBLE);
+                if (adapter.getCount() == 0) {
+                    Empty_List_Textview.setVisibility(View.VISIBLE);
+                }
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        Notepad_Delete.setVisibility(View.GONE);
+                    }
+                }, 50);
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        Notepad_Delete_All_Checkbox.setChecked(false);
+                        Notepad_Delete_SelectAll.setBackgroundColor(0);
+                    }
+                }, 50);
+            }
+        });
 
         Notepad_Delete_Delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -384,6 +411,7 @@ public class NotepadService extends Service implements RemoveListener {
         final ImageView tmpimageview = (ImageView)ShowPopupWindowview.findViewById(R.id.PopupWindow_New_Delete);
         final EditText tmpedittext = (EditText)ShowPopupWindowview.findViewById(R.id.PopupWindow_New_Edittext);
         TextView notepadshowtitle = (TextView)ShowPopupWindowview.findViewById(R.id.notepad_show_title);
+        PopupWindow_Back = (ImageView) ShowPopupWindowview.findViewById(R.id.PopupWindow_Back);
         tmpedittext.setText(string);
         if (index == -1) {
             notepadshowtitle.setText("NEW-NOTE");
@@ -418,6 +446,12 @@ public class NotepadService extends Service implements RemoveListener {
             @Override
             public void onClick(View view) {
                 tmpedittext.setText("");
+            }
+        });
+        PopupWindow_Back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
             }
         });
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {

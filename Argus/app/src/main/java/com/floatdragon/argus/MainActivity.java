@@ -34,7 +34,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-//MainActivity
+//By zhangpzh 2015/9
 public class MainActivity extends ActionBarActivity{
 
     private GridView pGridView;                                                 //选择app的网格
@@ -104,6 +104,7 @@ public class MainActivity extends ActionBarActivity{
         /* 找到网格和网格上面的文字 */
         pSelectTextView = (TextView) findViewById(R.id.select_textView);
         pGridView = (GridView) findViewById(R.id.MainActivityGridView);
+
 
         circles = new RoundImageView[6];
         circles[0] = (RoundImageView) findViewById(R.id.circle1);
@@ -257,6 +258,10 @@ public class MainActivity extends ActionBarActivity{
             for(int i = 0 ; i < 6 ; i ++)
             {
                 circles[i].setDrawable(getResources().getDrawable(R.drawable.add_file));
+
+                //空圆圈周围只设一层黑色 border
+                //Don't forget to implement it !
+                circles[i].drawBlackLayerOnly();
             }
         }
         //否则 将对应图标显示在圆圈中, 有则显示图标, 无则显示为 "添加图标"
@@ -269,11 +274,16 @@ public class MainActivity extends ActionBarActivity{
                 if(tmpAppInfo.IsEmpty())
                 {
                     circles[i].setDrawable(getResources().getDrawable(R.drawable.add_file));
+                    //空圆圈周围只设一层黑色 border
+                    //Don't forget to implement it !
+                    circles[i].drawBlackLayerOnly();
                 }
                 //有图标
                 else
                 {
+                    //周围只设置一层灰色的 border
                     circles[i].setDrawable(tmpAppInfo.getAppIcon());
+                    circles[i].drawGreyLayerOnly();
                 }
             }
         }
@@ -435,6 +445,10 @@ public class MainActivity extends ActionBarActivity{
                 {
                     circles[i].setDrawable(getResources().getDrawable(R.drawable.add_file));
                     circles[i].turnNormal();
+
+                    //空圆圈周围只设一层黑色 border
+                    //Don't forget to implement it !
+                    circles[i].drawBlackLayerOnly();
                 }
             }
 
@@ -508,7 +522,11 @@ public class MainActivity extends ActionBarActivity{
             //1. 在圆圈 "numOfCircleToSelectApp" 中显示此 item 的 icon
             ImageView correspondingImageView = (ImageView) view.findViewById(R.id.app_icon);
             Drawable correspondingDrawable = correspondingImageView.getDrawable();
+
+            //Don't forget to implement it !
+            //变成满圆圈后, 既要改变中央图片,又要画圆圈
             circles[numOfCircleToSelectApp].setDrawable(correspondingDrawable);
+            circles[numOfCircleToSelectApp].drawGreyLayerOnly();
 
             //2. 更新列表: registered_pkgName、registeredAppInfos、leftAppInfos
             appInfo selectedAppInfo = leftAppInfos.get(i);
