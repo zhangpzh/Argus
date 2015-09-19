@@ -1,6 +1,7 @@
 package com.floatdragon.argus.floatDragon_ui;
 
 import android.graphics.drawable.Drawable;
+import android.hardware.Camera;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.util.logging.Handler;
  * Created by zouyun on 15/9/3.
  */
 public  class StaticData {
+    public static Camera camera;
     public static boolean init = false;
     public static int screenWidth;
     public static int screenHeight;

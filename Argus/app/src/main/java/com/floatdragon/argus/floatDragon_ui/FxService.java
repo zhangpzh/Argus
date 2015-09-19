@@ -6,17 +6,16 @@ package com.floatdragon.argus.floatDragon_ui;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
+import android.hardware.Camera;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -26,9 +25,10 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
@@ -81,6 +81,11 @@ public class FxService extends Service
     private static final int LIGHT_100_PERCENT = 255;
     private static final int LIGHT_AUTO = 0;
     private static final int LIGHT_ERR = -1;
+    private boolean flashLight = false;
+    private RotationObserver obverse;
+
+    private android.hardware.Camera camera = null;
+
 
     private BrightObserver mBrightObserver;
     private PowerManager mPowerManager;
@@ -92,6 +97,7 @@ public class FxService extends Service
         // TODO Auto-generated method stub
         super.onCreate();
         Log.i(TAG, "oncreat");
+        obverse = new RotationObserver(new Handler());
         createFloatView();
     }
 
@@ -164,11 +170,11 @@ public class FxService extends Service
         // mFloatView3.setVisibility(View.VISIBLE);
         mFloatView4 = (Button)mFloatLayout.findViewById(R.id.button4);
         mFloatView4.setVisibility(View.VISIBLE);
-        if(getMobileDataStatus("getMobileDataEnabled") == true){
-            mFloatView4.setBackground(getResources().getDrawable(R.drawable.apn_on));
+        if(getRotationStatus(mContext)){
+            mFloatView4.setBackgroundResource(R.drawable.rotation_on);
         }
         else{
-            mFloatView4.setBackground(getResources().getDrawable(R.drawable.apn_off));
+            mFloatView4.setBackgroundResource(R.drawable.rotation_off);
         }
 
         mFloatView5 = (Button)mFloatLayout.findViewById(R.id.button5);
@@ -199,7 +205,7 @@ public class FxService extends Service
         mBrightness.setVisibility(View.VISIBLE);
         mBrightness2.setVisibility(View.VISIBLE);
         mBrightness.setBackground(getResources().getDrawable(R.drawable.brightness_most));
-        mBrightness2.setBackground(getResources().getDrawable(R.drawable.brightness_low));
+        mBrightness2.setBackground(getResources().getDrawable(R.drawable.brightness_more));
         refreshButton();
         mBrightness.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -345,6 +351,7 @@ public class FxService extends Service
 //
 //            }
 //        });
+        /*
         mFloatView4.setOnClickListener(new OnClickListener()
         {
 
@@ -363,7 +370,22 @@ public class FxService extends Service
                 }
 
             }
-        });
+        }); */
+        mFloatView4.setOnClickListener(new OnClickListener()  {
+
+        @Override
+        public void onClick(View v)
+        {
+            if (getRotationStatus(mContext)) {
+                setRotationStatus(getContentResolver(), 0);
+                v.setBackgroundResource(R.drawable.rotation_off);
+            }
+            else {
+                setRotationStatus(getContentResolver(), 1);
+                v.setBackgroundResource(R.drawable.rotation_on);
+            }
+        }
+    });
         mFloatView5.setOnClickListener(new OnClickListener()
         {
 
@@ -553,62 +575,6 @@ public class FxService extends Service
         return isOpen;
 
     }
-
-//    package com.example.bs;
-//
-//    import java.lang.reflect.Field;
-//    import java.lang.reflect.InvocationTargetException;
-//    import java.lang.reflect.Method;
-//    import android.app.Activity;
-//    import android.content.ContentResolver;
-//    import android.content.Context;
-//    import android.database.ContentObserver;
-//    import android.os.Bundle;
-//    import android.os.Handler;
-//    import android.os.PowerManager;
-//    import android.provider.Settings;
-//    import android.provider.Settings.SettingNotFoundException;
-//    import android.view.View;
-//    import android.view.View.OnClickListener;
-//    import android.widget.Button;
-//    import android.widget.Toast;
-
-//    public class BrightnessSwitch extends Activity implements OnClickListener
-//    {
-
-
-    /** Called when the activity is first created. */
-//        @Override
-//        public void onCreate(Bundle savedInstanceState)
-//        {
-//            super.onCreate(savedInstanceState);
-//            setContentView(R.layout.main);
-//            mPowerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);
-//
-//            mBrightObserver = new BrightObserver(new Handler());
-//
-//            mBrightness = (Button)findViewById(R.id.bright);
-//            refreshButton();
-//            mBrightness.setOnClickListener(this);
-//        }
-
-
-//        @Override
-//        protected void onDestroy()
-//        {
-//            // TODO Auto-generated method stub
-//            super.onDestroy();
-//            mBrightObserver.stopObserver();
-//        }
-//
-//
-//        @Override
-//        protected void onResume()
-//        {
-//            // TODO Auto-generated method stub
-//            super.onResume();
-//            mBrightObserver.startObserver();
-//        }
 
     //更新按钮
     private void refreshButton()
@@ -861,22 +827,6 @@ public class FxService extends Service
             Toast.makeText(FxService.this, "亮度设置有改变", Toast.LENGTH_SHORT).show();
         }
 
-        //注册观察
-        public void startObserver()
-        {
-            mResolver.registerContentObserver(Settings.System
-                            .getUriFor(Settings.System.SCREEN_BRIGHTNESS), false,
-                    this);
-            mResolver.registerContentObserver(Settings.System
-                            .getUriFor(Settings.System.SCREEN_BRIGHTNESS_MODE), false,
-                    this);
-        }
-
-        //解除观察
-        public void stopObserver()
-        {
-            mResolver.unregisterContentObserver(this);
-        }
     }
 //    }
 
@@ -884,11 +834,77 @@ public class FxService extends Service
     public void onDestroy()
     {
         // TODO Auto-generated method stub
+
+        if (camera != null) {
+            Camera.Parameters param = camera.getParameters();
+            param.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            camera.setParameters(param);
+            camera.stopPreview();
+        }
+        if (obverse != null)
+            obverse.stopObserver();
         super.onDestroy();
         if(mFloatLayout != null)
         {
             //移除悬浮窗口
             mWindowManager.removeView(mFloatLayout);
+        }
+    }
+
+    private void setRotationStatus(ContentResolver resolver, int status)
+    {
+        //得到uri
+        Uri uri = android.provider.Settings.System.getUriFor("accelerometer_rotation");
+        //沟通设置status的值改变屏幕旋转设置
+        android.provider.Settings.System.putInt(resolver, "accelerometer_rotation", status);
+        //通知改变
+        resolver.notifyChange(uri, null);
+    }
+
+    private boolean getRotationStatus(Context context)
+    {
+        int status = 0;
+        try
+        {
+            status = android.provider.Settings.System.getInt(getContentResolver(),
+                    android.provider.Settings.System.ACCELEROMETER_ROTATION);
+        }
+        catch (Settings.SettingNotFoundException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return status == 1;
+    }
+    private class RotationObserver extends ContentObserver {
+        ContentResolver mResolver;
+
+        public RotationObserver(android.os.Handler handler)
+        {
+            super(handler);
+            mResolver = getContentResolver();
+            // TODO Auto-generated constructor stub
+        }
+
+        //屏幕旋转设置改变时调用
+        @Override
+        public void onChange(boolean selfChange)
+        {
+            // TODO Auto-generated method stub
+            super.onChange(selfChange);
+            //更新按钮状态
+        }
+
+        public void startObserver()
+        {
+            mResolver.registerContentObserver(Settings.System
+                            .getUriFor(Settings.System.ACCELEROMETER_ROTATION), false,
+                    this);
+        }
+
+        public void stopObserver()
+        {
+            mResolver.unregisterContentObserver(this);
         }
     }
 
