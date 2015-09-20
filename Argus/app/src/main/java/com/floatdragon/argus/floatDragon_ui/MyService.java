@@ -101,7 +101,7 @@ public class MyService extends Service {
         windowManagerParas.height = StaticData.circleSize;
         windowManagerParas.width = StaticData.circleSize;
         floatView = new FloatView(getApplicationContext());
-        floatView.setImageAlpha(100);
+        floatView.setImageAlpha(200);
         floatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
