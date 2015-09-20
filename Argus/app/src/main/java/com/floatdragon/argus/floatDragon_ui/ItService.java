@@ -115,9 +115,13 @@ public class ItService extends Service
 
 //        mGridLayout = (GridLayout) mFloatLayout.findViewById(R.id.gridLayout);
         mGridLayout = (PercentRelativeLayout)mFloatLayout.findViewById(R.id.gridLayout);
-        mGridLayout.getBackground().setAlpha(100);
+        mGridLayout.getBackground().setAlpha(200);
 
 
+        ViewGroup.LayoutParams lp = mGridLayout.getLayoutParams();
+        lp.width = StaticData.screenWidth / 5 * 3;
+        lp.height = lp.width ;
+        mGridLayout.setLayoutParams(lp);
         // appInfos =  MainActivity.getMainActivity().getRegisteredAppInfos();
 
         showRegisteredAppInGridView(readSettings());
