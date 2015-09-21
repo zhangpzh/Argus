@@ -141,8 +141,7 @@ public class FxService extends Service
         //获取浮动窗口视图所在布局
         mFloatLayout = (LinearLayout) inflater.inflate(R.layout.float_layout_big, null);
         mGridLayout = (PercentRelativeLayout) mFloatLayout.findViewById(R.id.gridLayout);
-        mGridLayout.getBackground().setAlpha(100);
-
+        mGridLayout.getBackground().setAlpha(200);
         ViewGroup.LayoutParams lp = mGridLayout.getLayoutParams();
         lp.width = StaticData.screenWidth / 5 * 3;
         lp.height = lp.width ;
@@ -582,22 +581,16 @@ public class FxService extends Service
         switch (getBrightStatus())
         {
             case LIGHT_NORMAL:
-                mBrightness.setText("light_50percent");
                 break;
             case LIGHT_50_PERCENT:
-                mBrightness.setText("light_75percent");
                 break;
             case LIGHT_75_PERCENT:
-                mBrightness.setText("light_100percent");
                 break;
             case LIGHT_100_PERCENT:
-                mBrightness.setText("string.light_auto");
                 break;
             case LIGHT_AUTO:
-                mBrightness.setText("string.light_normal");
                 break;
             case LIGHT_ERR:
-                mBrightness.setText("light_err");
                 break;
         }
     }
@@ -823,7 +816,6 @@ public class FxService extends Service
         {
             // TODO Auto-generated method stub
             super.onChange(selfChange);
-            refreshButton();
             Toast.makeText(FxService.this, "亮度设置有改变", Toast.LENGTH_SHORT).show();
         }
 
