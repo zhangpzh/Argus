@@ -397,7 +397,7 @@ public class MainActivity extends ActionBarActivity{
                     若圆圈中为空,无效
                     若圆圈中不空:
                             circleMode 切换至 removeMode, 中间删除按钮出现
-                            当前圆圈变绿, 更新 boolean toBeRemoved[], int removeAppsNum
+                            当前圆圈变绿, 更新 boolean toBeRemoved[], int removeAppsNum, 并返回 true -- 以免调用 onKeyUp 打回原型
     */
     public class RoundImageViewOnLongClickListener implements View.OnLongClickListener {
         @Override
@@ -422,9 +422,9 @@ public class MainActivity extends ActionBarActivity{
                     tmpView.turnGreen();
                     storeGlobalValue.toBeRemoved[tmpView.number] = true;
                     storeGlobalValue.removeAppsNum ++;
+                    return true;
                 }
             }
-            return false;
         }
     }
 
